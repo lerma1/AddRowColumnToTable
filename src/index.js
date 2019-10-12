@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {Tree} from "./tree";
-import {addNode} from "./immutable-tree"
+import {addNode,deleteNode} from "./immutable-tree"
 
 
 var tree = new Tree({value:0, color:"White", VerticalSpan: 1});
@@ -43,6 +43,7 @@ console.log(json);*/
 
 let newTree = addNode ({value: 12, color: "Red", VerticalSpan: 1}, 8, tree);
  newTree = addNode ({value: 12, color: "Red", VerticalSpan: 1}, 7, newTree);
+ newTree = deleteNode(12, newTree);
 
 
 
