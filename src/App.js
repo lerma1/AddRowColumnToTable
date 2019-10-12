@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import MyTable from "./table";
+import MyForm from "./form"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class App extends Component {
+  constructor(props){
+    super(props)
+  }
+  render() {
+    return (
+         <div className="container">
+             <div className="App">
+            <h1>Вставка столбцов/строк</h1>
+
+            <p><span className="h6" >Задание:   </span>Дана таблица, структура которой представима в виде «дерева». Необходимо реализовать вставку строк и колонок в таблицу в указанной позиции.</p>
+             </div>
+             <MyForm/>
+             <MyTable tree={this.props.tree}/>
+
+        </div>
+    );
+  }
 }
 
 export default App;

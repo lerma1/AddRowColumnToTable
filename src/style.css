@@ -1,0 +1,20 @@
+.table-tree {
+    display: block;
+    text-align: center;
+    margin: auto;
+}
+
+
+.container {
+    max-width: 600px;
+    min-width: 200px;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+
+}
+
+.table-tree td {
+   border: black solid;
+}
