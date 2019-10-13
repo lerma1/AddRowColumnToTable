@@ -100,10 +100,10 @@ export const getDepth = (node, tree) => {
 
     while(currentNode!= undefined) {
         currentNode = getParent(currentNode, tree);
-        depth++;
+        if(currentNode)depth += currentNode.VerticalSpan;
     }
 
-     return depth-1;
+     return depth;
 }
 
 export const sortOfDepth = (tree) => {
@@ -148,6 +148,15 @@ export const findNode = (value, currentTree) => {
     currentTree.traverse((node) => {if (node.value === value) {foundNode = node;}});
 
     return (foundNode === null) ? -1 : foundNode;
+};
+
+export const getSiblings = (value, tree) => {
+    let arrSiblings = [];
+    let node = findNode(value, tree);
+    let depth = getDepth(node,tree);
+    tree.traverse((node) => {if (getDepth(node,tree) === depth) {arrSiblings.push(node);}});
+
+    return arrSiblings;
 };
 
 

@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import {Tree} from "./tree";
-//import {addСolumn} from "./immutable-tree"
+import {addСolumn,addRow} from "./immutable-tree"
 
 
-//var tree = new Tree({value:0, color:"White", VerticalSpan: 1});
-/*let testTree = () =>{
+export var tree = new Tree({value:0, color:"White", VerticalSpan: 1});
+let testTree = () =>{
     tree.add({value: 1, color: "Orange", VerticalSpan: 1}, 0, tree.traverse);
     tree.add({value: 2, color: "Orange", VerticalSpan: 1}, 0, tree.traverse);
     tree.add({value: 3, color: "Orange", VerticalSpan: 2}, 0, tree.traverse);
@@ -18,42 +18,32 @@ import {Tree} from "./tree";
     tree.add({value: 8, color: "Purple", VerticalSpan: 1}, 5, tree.traverse);
     tree.add({value: 9, color: "Purple", VerticalSpan: 1}, 3, tree.traverse);
     tree.add({value: 10, color: "Purple", VerticalSpan: 1}, 3, tree.traverse);
-};*/
-var treeEasy = new Tree({value:0, color:"White", VerticalSpan: 1});
+};
+export var easyTree = new Tree({value:0, color:"White", VerticalSpan: 1});
 let testEasyTree = () =>{
-    treeEasy.add({value: 1, color: "Coral", VerticalSpan: 1}, 0, treeEasy.traverse);
-    treeEasy.add({value: 2, color: "Coral", VerticalSpan: 1}, 0, treeEasy.traverse);
-    treeEasy.add({value: 3, color: "Coral", VerticalSpan: 1}, 0, treeEasy.traverse);
-    treeEasy.add({value: 4, color: "Coral", VerticalSpan: 1}, 0, treeEasy.traverse);
-    treeEasy.add({value: 5, color: "LightGreen", VerticalSpan: 1}, 1, treeEasy.traverse);
-    treeEasy.add({value: 6, color: "LightGreen", VerticalSpan: 1}, 2, treeEasy.traverse);
-    treeEasy.add({value: 7, color: "LightGreen", VerticalSpan: 1}, 3, treeEasy.traverse);
-    treeEasy.add({value: 8, color: "LightGreen", VerticalSpan: 1}, 4, treeEasy.traverse);
-    treeEasy.add({value: 9, color: "MediumPurple", VerticalSpan: 1}, 5, treeEasy.traverse);
-    treeEasy.add({value: 10, color: "MediumPurple", VerticalSpan: 1}, 6, treeEasy.traverse);
-    treeEasy.add({value: 11, color: "MediumPurple", VerticalSpan: 1}, 7, treeEasy.traverse);
-    treeEasy.add({value: 12, color: "MediumPurple", VerticalSpan: 1}, 8, treeEasy.traverse);
-    treeEasy.add({value: 13, color: "CornflowerBlue", VerticalSpan: 1}, 9, treeEasy.traverse);
-    treeEasy.add({value: 14, color: "CornflowerBlue", VerticalSpan: 1}, 10, treeEasy.traverse);
-    treeEasy.add({value: 15, color: "CornflowerBlue", VerticalSpan: 1}, 11, treeEasy.traverse);
-    treeEasy.add({value: 16, color: "CornflowerBlue", VerticalSpan: 1}, 12, treeEasy.traverse);
+    easyTree.add({value: 1, color: "Coral", VerticalSpan: 1}, 0, easyTree.traverse);
+    easyTree.add({value: 2, color: "Coral", VerticalSpan: 1}, 0, easyTree.traverse);
+    easyTree.add({value: 3, color: "Coral", VerticalSpan: 1}, 0, easyTree.traverse);
+    easyTree.add({value: 4, color: "Coral", VerticalSpan: 1}, 0, easyTree.traverse);
+    easyTree.add({value: 5, color: "LightGreen", VerticalSpan: 1}, 1, easyTree.traverse);
+    easyTree.add({value: 6, color: "LightGreen", VerticalSpan: 1}, 2, easyTree.traverse);
+    easyTree.add({value: 7, color: "LightGreen", VerticalSpan: 1}, 3, easyTree.traverse);
+    easyTree.add({value: 8, color: "LightGreen", VerticalSpan: 1}, 4, easyTree.traverse);
+    easyTree.add({value: 9, color: "MediumPurple", VerticalSpan: 1}, 5, easyTree.traverse);
+    easyTree.add({value: 10, color: "MediumPurple", VerticalSpan: 1}, 6, easyTree.traverse);
+    easyTree.add({value: 11, color: "MediumPurple", VerticalSpan: 1}, 7, easyTree.traverse);
+    easyTree.add({value: 12, color: "MediumPurple", VerticalSpan: 1}, 8, easyTree.traverse);
+    easyTree.add({value: 13, color: "CornflowerBlue", VerticalSpan: 1}, 9, easyTree.traverse);
+    easyTree.add({value: 14, color: "CornflowerBlue", VerticalSpan: 1}, 10, easyTree.traverse);
+    easyTree.add({value: 15, color: "CornflowerBlue", VerticalSpan: 1}, 11, easyTree.traverse);
+    easyTree.add({value: 16, color: "CornflowerBlue", VerticalSpan: 1}, 12, easyTree.traverse);
 
 };
-//testTree();
+testTree();
 testEasyTree();
-console.log(treeEasy);
-/*let json = JSON.stringify(tree, function replacer(key, value) {
-    return (key == 'parent') ? undefined : value;
-});
-
-console.log(json);*/
-
-// newTree = addNode ({value: 12, color: "Red", VerticalSpan: 1}, 7, newTree);
-//newTree = addNode ({value: 12, color: "Red", VerticalSpan: 1}, 9, newTree);
- //newTree = deleteNode(12, newTree);
+console.log(tree);
 
 
-
-ReactDOM.render(<App tree={treeEasy} />, document.getElementById('root'));
+ReactDOM.render(<App tree={tree} />, document.getElementById('root'));
 
 

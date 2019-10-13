@@ -1,4 +1,4 @@
-import {Node,getMaxDepth,getMaxValue,getParentsIndex,findNode,getParent} from "./tree";
+import {Node,getMaxDepth,getMaxValue,getParentsIndex,findNode,getParent,getSiblings} from "./tree";
 import update from 'react-addons-update';
 
 
@@ -84,20 +84,17 @@ export  function deleteNode(value, tree) {
 export  function addСolumn(value, tree) {
 
     let maxValue = getMaxValue(tree);
-    let node = new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1, parent: findNode(0, tree)});
+    let node = new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1});
 
     let currentNode = node;
     for(let i = 1; i < getMaxDepth(tree); i++){
 
         currentNode.children.push(new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1}));
 
-        //currentNode.children[0].parent = currentNode;
         currentNode =  currentNode.children[0];
     }
-    //в узле 0 нет ссылки на новый узел? надо поменять парента у всех старых узлов?
 
     let arrayIndexs = getParentsIndex(value,tree);
-
     let processedData = {_root: {children:{$splice: [[arrayIndexs[0],0, node]]}}};
 
     let newTree = update(tree, processedData);
@@ -114,19 +111,43 @@ export  function addСolumn(value, tree) {
  * @return {tree} newTree, новая таблица с добавленной строкой
  */
 export  function addRow(value, tree) {
-    let newTree;
+     let processedData =  {_root: {children:{}}};
+
+   let maxValue = getMaxValue(tree);
+    let siblings = getSiblings(value, tree);
+    console.log("siblings", siblings );
+
+    for(let i = 0; i < siblings.length; i++) {
+        let arrayParentsIndex = getParentsIndex(siblings[i].value, tree);
+        var currentData = processedData._root.children;
+        console.log("arrayParentsIndex", siblings[i].value, arrayParentsIndex );
+        let node = new Node ({VerticalSpan: siblings[i].VerticalSpan, color: "Aqua",value: ++maxValue });
+        node.children = getParent(siblings[i],tree).children;
+        console.log("node ", siblings[i].value, node );
+
+        for(let j = 0; j < arrayParentsIndex.length-1; j++) {
+
+            currentData[arrayParentsIndex[j]] = {children: {}};
+            currentData =  currentData[arrayParentsIndex[j]].children;
+        }
+        currentData['$splice'] = [[arrayParentsIndex[arrayParentsIndex.length-1],1,node]];
+    }
+
+    console.log(processedData);
+
+
 // собрать всех соседей того же уровня что и родители (можно использовать старую функцию)
     //строку добавляем выше!
-//для каждого соседа родителя и для родителя:
-    //берем детей
+//для каждого соседа родителя
+
     //для каждого ребенка
-            // //создаем новый узел с тем же rowspan - иначе получится таблица, не представимая в виде дерева
-            //добавляем в дети этому узлу ребенка
-            //добавляем в дети родителя новый узел вместо ребенка (splice?)
+            // //создаем новый узел с тем же rowspan - иначе получится таблица, не представимая в виде дерева, детей ссылаем на детей текущего узла
+            //добавляем в дети родителя новый узел вместо ребенка (splice?) создавая кусок процессдата
+    //
 
 
 
-
+    let newTree = update(tree, processedData);
     return newTree;
 
 
