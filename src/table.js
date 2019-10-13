@@ -7,6 +7,8 @@ import './style.css'
 class MyTable extends Component {
     constructor(props){
         super(props)
+
+
     }
 
     render() {
@@ -21,7 +23,7 @@ class MyTable extends Component {
         for ( let i=1; i < arrayOfDepth.length; i++ ) {
 
             let tr = <tr key = {'tr'+i}>
-                {arrayOfDepth[i].map( (currentNode,index) =>  <td key = {i+index}
+                {arrayOfDepth[i].map( (currentNode,index) =>  <td key = {currentNode.value}
                                                                   className=" "
                                                                   rowSpan = {currentNode.VerticalSpan}
                                                                   colSpan={currentNode.children.length||1}
@@ -30,7 +32,7 @@ class MyTable extends Component {
                                                                       "height":(currentNode.VerticalSpan*HEIGHT)+ "px"}}
                                                                 >
                                                                     {currentNode.value} Depth:
-                    {getDepth(currentNode)}
+                                                                    {getDepth(currentNode,this.props.tree)}
                                                                 </td> )}
                          </tr>;
 

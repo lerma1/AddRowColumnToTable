@@ -3,7 +3,6 @@ export function Node(data={value:0, color:"white",VerticalSpan:1}) {
     this.value = data.value;
     this.color = data.color;
     this.VerticalSpan = data.VerticalSpan;
-    this.parent = null;
     this.children = [];
 }
 
@@ -46,7 +45,7 @@ Tree.prototype.add = function(data, toData, traversal) {
 
 
 Tree.prototype.remove = function(data, fromData, traversal) {
-    var tree = this,
+    var
         parent = null,
         childToRemove = null,
         index;
@@ -86,24 +85,31 @@ function findIndex(arr, data) {
     return index;
 }
 
+export const getParent = (node, tree) => {
+    let parent = undefined;
+        tree.traverse((currentNode) => {
+            let isParent = currentNode.children.find((item) => {return item == node;});
+            if(isParent != undefined) parent = currentNode;
+        });
+    return parent;
+}
 
-export const getDepth = (node) => {
+export const getDepth = (node, tree) => {
     let depth = 0;
     let currentNode = node;
 
-    while(currentNode.parent != null) {
-        currentNode = currentNode.parent;
-        depth+=currentNode.VerticalSpan;
-
+    while(currentNode!= undefined) {
+        currentNode = getParent(currentNode, tree);
+        depth++;
     }
 
-    return depth;
+     return depth-1;
 }
 
 export const sortOfDepth = (tree) => {
     let arreyOfDepth = [];
     tree.traverse((node) => {
-        let depth = getDepth(node);
+        let depth = getDepth(node,tree);
         if (!arreyOfDepth[depth]) arreyOfDepth[depth] = [];
         arreyOfDepth[depth].push(node);
 
@@ -111,8 +117,38 @@ export const sortOfDepth = (tree) => {
     return arreyOfDepth;
 }
 
+export const getMaxDepth = (tree) => {
+    let maxDepth = 0;
+    tree.traverse((node) => { if (getDepth(node,tree) > maxDepth) {maxDepth = getDepth(node,tree);}});
+    return maxDepth;
+};
 
+export const getMaxValue = (tree) => {
+        let maxValue = 0 ;
+    tree.traverse((node) => { if (node.value > maxValue) {maxValue = node.value ;} });
+    return  maxValue;
+    };
 
+export const getParentsIndex = (value,tree) => {
+    let arrIndex = [];
+    let currentValue = value;
+    let currentNode = getParent(findNode(value,tree),tree);
+
+    while(currentNode!= undefined) {
+        arrIndex.unshift(currentNode.children.findIndex((element) => element.value == currentValue ));
+        currentValue = currentNode.value;
+        currentNode = getParent(currentNode, tree);
+
+    }
+    return arrIndex;
+};
+
+export const findNode = (value, currentTree) => {
+    let foundNode = null;
+    currentTree.traverse((node) => {if (node.value === value) {foundNode = node;}});
+
+    return (foundNode === null) ? -1 : foundNode;
+};
 
 
 

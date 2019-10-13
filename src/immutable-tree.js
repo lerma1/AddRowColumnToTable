@@ -1,6 +1,6 @@
-import {Node} from "./tree";
+import {Node,getMaxDepth,getMaxValue,getParentsIndex,findNode,getParent} from "./tree";
 import update from 'react-addons-update';
-import {getDepth} from "./tree";
+
 
 
 /**
@@ -13,31 +13,10 @@ import {getDepth} from "./tree";
  */
 export  function addNode(data, valueParentNode, tree) {
     let node = new Node(data);
-   let parent;
-    let maxValue = 0;
+    node.value = 1 +  getMaxValue(tree);
+    //node.parent = findNode(valueParentNode, tree);
 
-    const findParent = (node) => { if (node.value === valueParentNode) {parent = node;} };
-    const findMaxValue = (node) => { if (node.value > maxValue) {maxValue = node.value ;} };
-    const getParentsIndex = (node) => {
-                    let arrIndex = [];
-                    let currentNode = node;
-
-                    while(currentNode.parent != null) {
-                        let currentValue = currentNode.value;
-                        currentNode = currentNode.parent;
-                        arrIndex.unshift(currentNode.children.findIndex((element, index, array) => element.value == currentValue ));
-                    }
-                    return arrIndex;
-                }
-
-    tree.traverse(findParent); // теперь в parent храниться родитель
-
-    tree.traverse(findMaxValue) ;
-
-    node.value = 1 +  maxValue;
-    node.parent = parent;
-
-      let arrayIndexs = getParentsIndex(parent);
+      let arrayIndexs = getParentsIndex(getParent(node,tree));
       let processedData = {_root: {children:{}}};
       let currentPrData = processedData._root.children; //указывает на пустой массив
 
@@ -46,8 +25,10 @@ export  function addNode(data, valueParentNode, tree) {
         currentPrData =  currentPrData[arrayIndexs[i]].children;
     }
      currentPrData['$push']= [node];
-    console.log(processedData);
+
     let newTree = update(tree, processedData);
+
+
 
      return newTree;
 }
@@ -68,11 +49,11 @@ export  function deleteNode(value, tree) {
         let arrIndex = [];
         let currentNode = node;
 
-        while(currentNode.parent != null) {
+       /* while(currentNode.parent != null) {
             let currentValue = currentNode.value;
             currentNode = currentNode.parent;
-            arrIndex.unshift(currentNode.children.findIndex((element, index, array) => element.value == currentValue ));
-        }
+            arrIndex.unshift(currentNode.children.findIndex((element, index, array) => element.value === currentValue ));
+        }*/
         return arrIndex;
     }
 
@@ -101,11 +82,27 @@ export  function deleteNode(value, tree) {
  * @return {tree} newTree, новая таблица с добавленным столбцом
  */
 export  function addСolumn(value, tree) {
-    let newTree;
 
+    let maxValue = getMaxValue(tree);
+    let node = new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1, parent: findNode(0, tree)});
 
+    let currentNode = node;
+    for(let i = 1; i < getMaxDepth(tree); i++){
+
+        currentNode.children.push(new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1}));
+
+        //currentNode.children[0].parent = currentNode;
+        currentNode =  currentNode.children[0];
+    }
+    //в узле 0 нет ссылки на новый узел? надо поменять парента у всех старых узлов?
+
+    let arrayIndexs = getParentsIndex(value,tree);
+
+    let processedData = {_root: {children:{$splice: [[arrayIndexs[0],0, node]]}}};
+
+    let newTree = update(tree, processedData);
+    console.log("addСolumn, newTree: ", newTree);
     return newTree;
-
 
 }
 
