@@ -1,4 +1,4 @@
-import {Node,getMaxDepth,getMaxValue,getParentsIndex,findNode,getParent,getSiblings} from "./tree";
+import {Node, getMaxDepth, getMaxValue, getParentsIndex, findNode, getParent, getSiblings, getDepth} from "./tree";
 import update from 'react-addons-update';
 
 
@@ -134,16 +134,92 @@ export  function addRow(value, tree) {
     }
 
     console.log(processedData);
+    let newTree = update(tree, processedData);
+    return newTree;
 
 
-// собрать всех соседей того же уровня что и родители (можно использовать старую функцию)
-    //строку добавляем выше!
-//для каждого соседа родителя
+}
 
-    //для каждого ребенка
-            // //создаем новый узел с тем же rowspan - иначе получится таблица, не представимая в виде дерева, детей ссылаем на детей текущего узла
-            //добавляем в дети родителя новый узел вместо ребенка (splice?) создавая кусок процессдата
-    //
+/**
+ * Добавляет новую строку в ячейку value ДЛЯ СЛОЖНОЙ ТАБЛИЦЫ*/
+    export  function addRowComplex(value, tree) {
+        let processedData =  {_root: {children:{}}};
+    var currentData;
+          let maxValue = getMaxValue(tree);
+
+
+    let targetNode = findNode(value,tree);
+    let targetDepth = getDepth(targetNode, tree);
+
+        let siblingsParents = getSiblings(getParent(targetNode,tree).value,tree);
+     console.log("siblings", siblingsParents );
+
+     for(let i = 0; i < siblingsParents.length; i++){
+
+         let parentDepth = getDepth(siblingsParents[i].children[0], tree);
+
+         //увеличиваем VS кому нужно
+         if(siblingsParents[i].children.length == 0 || targetDepth < parentDepth  ) {
+             let arrayParentsIndex = getParentsIndex(siblingsParents[i].value, tree);
+              currentData = processedData._root.children;
+
+             for(let j = 0; j < arrayParentsIndex.length-1; j++) {
+
+                 currentData[arrayParentsIndex[j]] = {children: {}};
+                 currentData =  currentData[arrayParentsIndex[j]].children;
+             }
+             currentData[arrayParentsIndex[arrayParentsIndex.length-1]] = {VerticalSpan:{$apply: function(x) {return x + 1;}}};
+
+         } else {
+             //тут мы добавляем новые ячейки
+             //новые ячейки мы куда добавляем? в siblingsParents[i]
+             let arrayParentsIndex = getParentsIndex(siblingsParents[i].value, tree);
+             currentData = processedData._root.children;
+
+             let arrNewNode = [];
+             for( let k = 0; k < siblingsParents[i].children.length; k++){
+                 arrNewNode[k] = new Node ({VerticalSpan: 1, color: "Aqua",value: ++maxValue });
+                 arrNewNode[k].children[0] = siblingsParents[i].children[k];
+             }
+
+//вот тут мы должны сгрупировать $splice нужно сформировать массив чего и куда вставлять
+             for(let j = 0; j < arrayParentsIndex.length; j++) {
+
+                 currentData[arrayParentsIndex[j]] = {children: {}};
+                 currentData =  currentData[arrayParentsIndex[j]].children;
+             }
+             currentData['$splice'] = [[0,arrNewNode.length,...arrNewNode]];
+             console.log(siblingsParents[i].value);
+         }
+
+
+
+         }
+
+    console.log("processedData", processedData);
+    let newTree = update(tree, processedData);
+    return newTree;
+
+     }
+    /*
+         for(let i = 0; i < siblings.length; i++) {
+             let arrayParentsIndex = getParentsIndex(siblings[i].value, tree);
+             var currentData = processedData._root.children;
+             console.log("arrayParentsIndex", siblings[i].value, arrayParentsIndex );
+             let node = new Node ({VerticalSpan: siblings[i].VerticalSpan, color: "Aqua",value: ++maxValue });
+             node.children = getParent(siblings[i],tree).children;
+             console.log("node ", siblings[i].value, node );
+
+             for(let j = 0; j < arrayParentsIndex.length-1; j++) {
+
+                 currentData[arrayParentsIndex[j]] = {children: {}};
+                 currentData =  currentData[arrayParentsIndex[j]].children;
+             }
+             currentData['$splice'] = [[arrayParentsIndex[arrayParentsIndex.length-1],1,node]];
+         }
+
+         console.log(processedData);
+
 
 
 
@@ -151,4 +227,4 @@ export  function addRow(value, tree) {
     return newTree;
 
 
-}
+}*/

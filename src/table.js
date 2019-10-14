@@ -29,8 +29,8 @@ class MyTable extends Component {
         const getColSpan = (node, tree) => {
             let maxDepth = getMaxDepth(tree);
             let countDepthChildren = 0;
-            console.log("node", node.value);
-            traverse(node, (currentNode) => {if(hasRow(maxDepth,currentNode,tree) ) { countDepthChildren++; console.log("maxDepth",maxDepth,"node",node.value, "currentNode",currentNode.value,"hasRow",hasRow(maxDepth,currentNode,tree));}});
+
+            traverse(node, (currentNode) => {if(hasRow(maxDepth,currentNode,tree) ) { countDepthChildren++;}});
 
             return countDepthChildren;
         }

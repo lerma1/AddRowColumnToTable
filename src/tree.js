@@ -164,8 +164,9 @@ export const findNode = (value, currentTree) => {
 export const getSiblings = (value, tree) => {
     let arrSiblings = [];
     let node = findNode(value, tree);
-    let depth = getDepth(node,tree);
-    tree.traverse((node) => {if (getDepth(node,tree) === depth) {arrSiblings.push(node);}});
+    let arrRows = getNumbersRow(node,tree);//искать по Row
+    let depth = arrRows[arrRows.length-1];
+    tree.traverse((node) => {if (hasRow(depth,node,tree) ) {arrSiblings.push(node);}});
 
     return arrSiblings;
 };
@@ -181,6 +182,6 @@ export const getNumbersRow = (node, tree) => {
 
 export const hasRow = (row, node, tree) => {
     let arrRows = getNumbersRow(node,tree);
-    console.log ("hasRow:","node",node.value,"arrRows",arrRows);
+
     return (arrRows.findIndex((current)=>current == row)) != -1;
 }

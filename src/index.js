@@ -64,7 +64,8 @@ testTree();
 testEasyTree();
 console.log(complexTree);
 
+var history = [{text:"Создана таблица",tree: complexTree}];
 
-ReactDOM.render(<App tree={complexTree} />, document.getElementById('root'));
+ReactDOM.render(<App tree={complexTree} history = {history}/>, document.getElementById('root'));
 
 

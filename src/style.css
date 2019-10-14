@@ -19,8 +19,8 @@
    border: black solid;
 }
 
-.input-number{
 
-    width: 100px;
+.history-list{
+    height: 250px;
+    overflow-y: scroll;
 }
-
