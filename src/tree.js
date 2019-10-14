@@ -19,6 +19,15 @@ Tree.prototype.traverse = function(callback) {
 
 };
 
+ export const traverse = function(node, callback) {
+     if(!node){alert("1");return 0;}
+    (function recurse(currentNode) {
+        for (var i = 0, length = currentNode.children.length; i < length; i++) {  recurse(currentNode.children[i]); }
+        callback(currentNode);
+    })(node);
+
+};
+
 
 Tree.prototype.contains = function(callback, traversal) {
     traversal.call(this, callback);
@@ -87,7 +96,8 @@ function findIndex(arr, data) {
 
 export const getParent = (node, tree) => {
     let parent = undefined;
-        tree.traverse((currentNode) => {
+    if(!node){alert ("!");return 0;}
+    tree.traverse((currentNode) => {
             let isParent = currentNode.children.find((item) => {return item == node;});
             if(isParent != undefined) parent = currentNode;
         });
@@ -97,6 +107,7 @@ export const getParent = (node, tree) => {
 export const getDepth = (node, tree) => {
     let depth = 0;
     let currentNode = node;
+    if(!node){alert ("!");return 0;}
 
     while(currentNode!= undefined) {
         currentNode = getParent(currentNode, tree);
@@ -159,5 +170,17 @@ export const getSiblings = (value, tree) => {
     return arrSiblings;
 };
 
+export const getNumbersRow = (node, tree) => {
+    let arrRows = [];
+    arrRows[0] = getDepth(node,tree);
+    for(let i = 1; i < node.VerticalSpan ; i ++) {
+        arrRows.push(i+arrRows[0]);
+    }
+    return arrRows;
+}
 
-
+export const hasRow = (row, node, tree) => {
+    let arrRows = getNumbersRow(node,tree);
+    console.log ("hasRow:","node",node.value,"arrRows",arrRows);
+    return (arrRows.findIndex((current)=>current == row)) != -1;
+}
