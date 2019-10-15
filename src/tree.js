@@ -46,7 +46,7 @@ Tree.prototype.add = function(data, toData, traversal) {
 
     if (parent) {
         parent.children.push(child);
-        child.parent = parent;
+
     } else {
         throw new Error('Cannot add node to a non-existent parent.');
     }
@@ -140,15 +140,30 @@ export const getMaxValue = (tree) => {
     return  maxValue;
     };
 
-export const getParentsIndex = (value,tree) => {
+/*Tree.prototype.formPathToParent = function (target) {
+    let path =  {_root: {}};
+    let currentPath = path._root;
+    let indexesParents = this.getParentsIndex(target);
+
+    for(let i = 0; i < indexesParents.length-1; i++) {
+        console.log(indexesParents);
+        currentPath.children = [];
+        currentPath[indexesParents[i]] = {};
+        currentPath =  currentPath[indexesParents[i]];
+    }
+    return path;
+}*/
+
+Tree.prototype.getParentsIndex  = function (node)  {
     let arrIndex = [];
-    let currentValue = value;
-    let currentNode = getParent(findNode(value,tree),tree);
+    let currentValue = node.value;
+
+    let currentNode = getParent(node, this);
 
     while(currentNode!= undefined) {
         arrIndex.unshift(currentNode.children.findIndex((element) => element.value == currentValue ));
         currentValue = currentNode.value;
-        currentNode = getParent(currentNode, tree);
+        currentNode = getParent(currentNode, this);
 
     }
     return arrIndex;
@@ -164,24 +179,24 @@ export const findNode = (value, currentTree) => {
 export const getSiblings = (value, tree) => {
     let arrSiblings = [];
     let node = findNode(value, tree);
-    let arrRows = getNumbersRow(node,tree);//искать по Row
+    let arrRows = tree.getNumbersRow(node);//искать по Row
     let depth = arrRows[arrRows.length-1];
-    tree.traverse((node) => {if (hasRow(depth,node,tree) ) {arrSiblings.push(node);}});
+    tree.traverse((node) => {if (tree.hasRow(depth,node) ) {arrSiblings.push(node);}});
 
     return arrSiblings;
 };
 
-export const getNumbersRow = (node, tree) => {
+Tree.prototype.getNumbersRow =  function(node)  {
     let arrRows = [];
-    arrRows[0] = getDepth(node,tree);
+    arrRows[0] = getDepth(node,this);
     for(let i = 1; i < node.VerticalSpan ; i ++) {
         arrRows.push(i+arrRows[0]);
     }
     return arrRows;
 }
 
-export const hasRow = (row, node, tree) => {
-    let arrRows = getNumbersRow(node,tree);
+Tree.prototype.hasRow =  function(row, node)  {
+    let arrRows = this.getNumbersRow(node);
 
     return (arrRows.findIndex((current)=>current == row)) != -1;
 }

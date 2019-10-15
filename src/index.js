@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {Tree} from "./tree";
-import {addСolumn,addRow} from "./immutable-tree"
+import {findNode, Tree} from "./tree";
+import {addСolumn,addRow,addCell,incrementVerticalSpan} from "./immutable-tree"
+import update from "react-addons-update";
 
 
 export var tree = new Tree({value:0, color:"White", VerticalSpan: 1});
@@ -62,10 +63,13 @@ let testEasyTree = () =>{
 };
 testTree();
 testEasyTree();
-console.log(complexTree);
 
-var history = [{text:"Создана таблица",tree: complexTree}];
 
-ReactDOM.render(<App tree={complexTree} history = {history}/>, document.getElementById('root'));
+
+
+let newTree = addRow(findNode(7, complexTree),complexTree);
+var history = {currentIndex:0, data:[{text:"Создана таблица",tree: complexTree}]};
+
+ReactDOM.render(<App tree={newTree} history = {history}/>, document.getElementById('root'));
 
 

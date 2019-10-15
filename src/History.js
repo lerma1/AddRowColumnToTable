@@ -7,11 +7,9 @@ import './style.css'
 class History extends Component {
     constructor(props){
         super(props)
-
-
-
         this.state = {
             history: this.props.history,
+            currentIndex:  this.props.history.currentIndex,
         }
     }
 
@@ -20,10 +18,21 @@ class History extends Component {
 
     render() {
 
-        const historyList = this.state.history.map((item, index) =>
-            <li key = {index} className= ""> {item.text} </li>
-        );
+        let unDoButtonEnabled = <Button  className="m-2 d-inline-flex btn-success" onClick = {this.props.onClickUnDo}>Отменить</Button>;
 
+        let unDoButtonDisabled = <Button  className="m-2 d-inline-flex btn-secondary" disabled >Отменить</Button>;
+
+        let reDoButtonEnabled = <Button  className="m-2 d-inline-flex btn-success" onClick = {this.props.onClickReDo}>Вставить</Button>;
+
+        let reDoButtonDisabled = <Button  className="m-2 d-inline-flex btn-secondary" disabled>Вставить</Button>;
+
+
+        const historyList = this.state.history.data.map((item, index) =>
+            (this.state.history.currentIndex ==index)?  <li key = {index} className= "font-weight-bold"> {item.text} </li> :
+                <li key = {index} className= ""> {item.text} </li>
+
+        );
+console.log("History",this.state.history);
         return (
             <div className="container card p-0">
                 <h5 className="card-header">История редактирования таблицы</h5>
@@ -35,8 +44,8 @@ class History extends Component {
 
                 </div>
                 <div className="d-flex justify-content-center">
-                    <Button variant="success" className="m-2 d-inline-flex " onClick = {this.props.onClickUnDo}>Отменить</Button>
-                    <Button variant="success" className="m-2 d-inline-flex " onClick = {this.props.onClickReDo}>Вставить</Button>
+                    {(this.props.enableUnDo) ? unDoButtonEnabled : unDoButtonDisabled}
+                    {(this.props.enableReDo) ? reDoButtonEnabled : reDoButtonDisabled}
                 </div>
             </div>
         );

@@ -6,11 +6,13 @@ import './style.css'
 
 
 class MyForm extends Component {
-  /*  constructor(props){
+   constructor(props){
         super(props)
+       this.state = {
 
+       }
 
-    }*/
+    }
 
 
 
@@ -24,6 +26,12 @@ class MyForm extends Component {
             //тут должна быть какая-то другая проверка
 
         }
+
+        let isCheckedRow = (this.props.isCheckedRow)? <input className="form-check-input" type="radio" name="exampleRadios"  value="option1" checked></input> :
+            <input className="form-check-input" type="radio" name="exampleRadios"  value="option1"></input>;
+        let isCheckedCol = (this.props.isCheckedCol)? <input className="form-check-input" type="radio" name="exampleRadios"  value="option2" checked></input> :
+            <input className="form-check-input" type="radio" name="exampleRadios"  value="option2"></input>;
+
 
         return (
 
@@ -42,15 +50,13 @@ class MyForm extends Component {
 
                     <div className="d-inline-block m-4">
                     <div className="form-check">
-                        <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                               value="option1" checked ></input>
+                       {isCheckedRow}
                             <label className="form-check-label" htmlFor="exampleRadios1">
                                 Строку
                             </label>
                     </div>
                     <div className="form-check  mb-3">
-                        <input className="form-check-input " type="radio" name="exampleRadios" id="exampleRadios2"
-                               value="option2"  ></input>
+                        {isCheckedCol}
                             <label className="form-check-label" htmlFor="exampleRadios2">
                                 Столбец
                             </label>

@@ -7,8 +7,9 @@ import './style.css'
 class MyTable extends Component {
     constructor(props){
         super(props)
-
-
+        this.state = {
+            tree: this.props.tree,
+        }
     }
 
 
@@ -19,38 +20,29 @@ class MyTable extends Component {
         const tdElements = [];
 
 
-        /*Tree.prototype.traverse = function(callback) {
-    (function recurse(currentNode) {
-        for (var i = 0, length = currentNode.children.length; i < length; i++) {  recurse(currentNode.children[i]); }
-        callback(currentNode);
-    })(this._root);
-
-};*/
         const getColSpan = (node, tree) => {
-            let maxDepth = getMaxDepth(tree);
-            let countDepthChildren = 0;
-
-            traverse(node, (currentNode) => {if(hasRow(maxDepth,currentNode,tree) ) { countDepthChildren++;}});
-
+            let countDepthChildren = 1;
+            traverse(node, (currentNode) => {if(currentNode.children.length>1)  { countDepthChildren++;}});
             return countDepthChildren;
         }
 
-        const arrayOfDepth = sortOfDepth(this.props.tree);
+        const arrayOfDepth = sortOfDepth(this.state.tree);
 
         for ( let i=1; i < arrayOfDepth.length; i++ ) {
 
             let tr = <tr key = {'tr'+i}>
-                {arrayOfDepth[i].map( (currentNode,index) =>  <td key = {currentNode.value}
-                                                                  className=" "
-                                                                  rowSpan = {currentNode.VerticalSpan}
-                                                                  colSpan={getColSpan(currentNode,this.props.tree)}
-                                                                  style={{"background-color": currentNode.color,
-                                                                      "width": ((currentNode.children.length||1)*WIDTH) + "px",
-                                                                      "height":(currentNode.VerticalSpan*HEIGHT)+ "px"}}
-                                                                >
-                                                                    {currentNode.value} Depth:
-                                                                    {getDepth(currentNode,this.props.tree)}
-                                                                </td> )}
+                            {arrayOfDepth[i].map( (currentNode,index) =>
+                            <td key = {currentNode.value}
+                              rowSpan = {currentNode.VerticalSpan}
+                              colSpan={getColSpan(currentNode,this.state.tree)}
+                              style={{"background-color": currentNode.color,
+                                  "width": ((currentNode.children.length||1)*WIDTH) + "px",
+                                  "height":(currentNode.VerticalSpan*HEIGHT)+ "px"}}
+                            >
+                                {currentNode.value} Depth:
+                                {getDepth(currentNode,this.state.tree)} NumbersRow:
+                                {this.state.tree.getNumbersRow(currentNode)}
+                            </td> )}
                          </tr>;
 
             tdElements.push(tr);
