@@ -14,13 +14,12 @@ class MyTable extends Component {
 
     render() {
         const tdElements = [];
-
+        const WIDTH = 900;
+        const HEIGHT = 400;
         const arrayOfDepth = this.state.tree.sortOfDepth();
 
-        let widthElement = (this.props.widthWindow)/arrayOfDepth.length;
-        widthElement= (widthElement>150)? 150 : widthElement;
-        let heightElement = (this.props.heightWindow - 500)/arrayOfDepth.length;
-        heightElement= (heightElement>150)? 150 : heightElement;
+        let widthElement = WIDTH/arrayOfDepth[arrayOfDepth.length-1].length;//еще тут нужно на нужное количество делить
+        let heightElement = HEIGHT/ this.props.tree.getMaxDepth();
 
         for (let i = 1; i < arrayOfDepth.length; i++) {
 

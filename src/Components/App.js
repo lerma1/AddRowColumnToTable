@@ -3,15 +3,15 @@ import MyTable from "./Table";
 import MyForm from "./Insert-form"
 import History from "./History";
 import MyNavbar from "./Navbar";
-import ChoiceTable from "./ChoiceTable";
-import {tree1, tree2} from "../index";
+import {tree1, tree2, tree3} from "../index";
 import "../css/style.css"
 
 
 class App extends Component {
     constructor(props) {
         super(props)
-        this.onClickInsert = this.onClickInsert.bind(this);
+        this.onClickInsertRow = this.onClickInsertRow.bind(this);
+        this.onClickInsertCol = this.onClickInsertCol.bind(this);
         this.onChoiceTable = this.onChoiceTable.bind(this);
         this.onClickUnDo = this.onClickUnDo.bind(this);
         this.onClickReDo = this.onClickReDo.bind(this);
@@ -24,13 +24,12 @@ class App extends Component {
             isCheckedRow: true,
             isCheckedCol: false,
             indexCheckedTable: 1,
-            widthWindow: 100,
-            heightWindow: 100,
+
         }
     }
 
 
-    onClickInsert() {
+    onClickInsertRow() {
         const value = Number(document.getElementById("input").value);
         if (!Number.isInteger(value)) {
             alert("Введите целое число - номер ячейки в таблице!");
@@ -42,10 +41,6 @@ class App extends Component {
             return;
         }
 
-        const radio = document.getElementsByName("exampleRadios");
-
-
-        if (radio[0].checked) {
             const newTree = this.state.tree.addRow(value);
             let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
 
@@ -54,32 +49,49 @@ class App extends Component {
 
             this.setState({tree: newTree, isCheckedRow: true, isCheckedCol: false, history: newHistory});
 
-        } else {
-            const newTree = this.state.tree.addColumn(value);
-            let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
-
-            if (newHistory.currentIndex != newHistory.data.length - 1) newHistory.data.slice(0, newHistory.currentIndex);
-            newHistory.data.push({text: `Вставлен столбец в ячейку № ${value}`, tree: newTree});
-
-            this.setState({tree: newTree, isCheckedRow: false, isCheckedCol: true, history: newHistory});
-
-        }
     }
 
-    onChoiceTable() {
-        const radio = document.getElementsByName("choice-table");
+    onClickInsertCol() {
+        const value = Number(document.getElementById("input").value);
+        if (!Number.isInteger(value)) {
+            alert("Введите целое число - номер ячейки в таблице!");
+            return;
+        }
 
-        if (radio[0].checked) {
+        if (value > this.state.tree.getMaxValue()) {
+            alert("Элемент с таким номером не найден!");
+            return;
+        }
+        const newTree = this.state.tree.addColumn(value);
+        let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
+
+        if (newHistory.currentIndex != newHistory.data.length - 1) newHistory.data.slice(0, newHistory.currentIndex);
+        newHistory.data.push({text: `Вставлен столбец в ячейку № ${value}`, tree: newTree});
+
+        this.setState({tree: newTree, isCheckedRow: false, isCheckedCol: true, history: newHistory});
+    }
+
+    onChoiceTable(value) {
+
+        if (value == 1) {
             const newTree = tree1;
             let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
             newHistory.data.push({text: `Создана Таблица №1`, tree: newTree});
 
             this.setState({tree: newTree, history: newHistory, indexCheckedTable: 0});
 
-        } else {
+        }
+        if (value == 2) {
             const newTree = tree2;
             let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
             newHistory.data.push({text: `Создана таблица №2`, tree: newTree});
+
+            this.setState({history: newHistory, tree: newTree, indexCheckedTable: 1});
+        }
+        if (value == 3) {
+            const newTree = tree3;
+            let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
+            newHistory.data.push({text: `Создана таблица №3`, tree: newTree});
 
             this.setState({history: newHistory, tree: newTree, indexCheckedTable: 1});
         }
@@ -99,11 +111,7 @@ class App extends Component {
 
     }
 
-    componentDidMount() {
-        const table = document.getElementById("table");
-        this.setState({widthWindow: window.innerWidth});
-        this.setState({heightWindow: window.innerHeight});
-    }
+
 
     render() {
 
@@ -112,21 +120,20 @@ class App extends Component {
 
 
             <div className="App">
-                <MyNavbar/>
+                <MyNavbar onChoiceTable={this.onChoiceTable}
+                          indexCheckedTable={this.state.indexCheckedTable}/>
                 <div className="container">
 
                     <MyTable tree={this.state.history.data[this.state.history.currentIndex].tree}
                              key={this.state.history.currentIndex}
-                             widthWindow={this.state.widthWindow}
-                             heightWindow={this.state.heightWindow}
-                    />
-                    <div className="card-deck">
-                        <div className="card border-0">
 
-                            <MyForm onClickInsert={this.onClickInsert} isCheckedRow={this.state.isCheckedRow}
+                    />
+                    <div className="pl-5">
+                        <div className="d-block ">
+
+                            <MyForm onClickInsertCol={this.onClickInsertCol} onClickInsertRow={this.onClickInsertRow} isCheckedRow={this.state.isCheckedRow}
                                     isCheckedCol={this.state.isCheckedCol}/>
-                            <ChoiceTable style={{"width": "100px"}} onChoiceTable={this.onChoiceTable}
-                                         indexCheckedTable={this.state.indexCheckedTable}/>
+
 
                         </div>
                         <History history={this.state.history}

@@ -32,17 +32,21 @@ class History extends Component {
 
         return (
             <div className="container card p-0">
-                <h5 className="card-header">История редактирования таблицы</h5>
+                <div className="card-header d-flex justify-content-between ">
+                    <div className="d-inline-block h5 mt-auto mb-auto">История редактирования таблицы</div>
+                    <div className="">
+                        {(this.props.enableUnDo) ? unDoButtonEnabled : unDoButtonDisabled}
+                        {(this.props.enableReDo) ? reDoButtonEnabled : reDoButtonDisabled}
+                    </div>
+                </div>
+
                 <div className="border history-list m-3">
-                    <ul id="history-list" scrollTop = "9999">
+                    <ul id="history-list">
                         {historyList}
                     </ul>
 
                 </div>
-                <div className="d-flex justify-content-center">
-                    {(this.props.enableUnDo) ? unDoButtonEnabled : unDoButtonDisabled}
-                    {(this.props.enableReDo) ? reDoButtonEnabled : reDoButtonDisabled}
-                </div>
+
             </div>
         );
     }
