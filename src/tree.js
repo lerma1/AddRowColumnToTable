@@ -19,12 +19,13 @@ Tree.prototype.traverse = function(callback) {
 
 };
 
- export const traverse = function(node, callback) {
-     if(!node){alert("1");return 0;}
+ export const traverse = function(node2, callback) {
+     if(!node2){alert("1");return 0;}
+
     (function recurse(currentNode) {
-        for (var i = 0, length = currentNode.children.length; i < length; i++) {  recurse(currentNode.children[i]); }
+        for (let i = 0, length = currentNode.children.length; i < length; i++) {  recurse(currentNode.children[i]); }
         callback(currentNode);
-    })(node);
+    })(node2);
 
 };
 
@@ -199,4 +200,17 @@ Tree.prototype.hasRow =  function(row, node)  {
     let arrRows = this.getNumbersRow(node);
 
     return (arrRows.findIndex((current)=>current == row)) != -1;
+}
+
+export const getColSpan = (node, tree) => { //НЕ РАБОТАЕТ!!!!
+    let countDepthChildren = 1;
+
+
+    traverse(node, (currentNode) => {
+        if (currentNode.children.length > 1) {
+            countDepthChildren++;
+        }
+    });
+
+    return countDepthChildren;
 }

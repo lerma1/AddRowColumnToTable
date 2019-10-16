@@ -22,7 +22,7 @@ class History extends Component {
 
         let unDoButtonDisabled = <Button  className="m-2 d-inline-flex btn-secondary" disabled >Отменить</Button>;
 
-        let reDoButtonEnabled = <Button  className="m-2 d-inline-flex btn-success" onClick = {this.props.onClickReDo}>Вставить</Button>;
+        let reDoButtonEnabled = <Button  className="m-2 d-inline-flex btn-success" onClick = {this.props.onClickReDo}>Вернуть</Button>;
 
         let reDoButtonDisabled = <Button  className="m-2 d-inline-flex btn-secondary" disabled>Вставить</Button>;
 

@@ -11,194 +11,64 @@ import {
 import update from 'react-addons-update';
 
 
-
 /**
- * Добавляет node как дочерний узел parentNode
- *
- * @param {object} data данные для элемента, который будем добавлять в дерево
- * @param {number} valueParentNode номер родительского узла, куда будем добавлять
- * @param {tree} tree дерево, куда будем добавлять
- * @return {tree} newTree, новая таблица с добавленным узлом
- */
-export  function addNode(data, valueParentNode, tree) {
-    let node = new Node(data);
-    node.value = 1 +  getMaxValue(tree);
-    //node.parent = findNode(valueParentNode, tree);
-
-      let arrayIndexs = tree.getParentsIndex(getParent(node));
-      let processedData = {_root: {children:{}}};
-      let currentPrData = processedData._root.children; //указывает на пустой массив
-
-     for(let i = 0; i < arrayIndexs.length; i++){
-        currentPrData[arrayIndexs[i]] = {children: {}}; //
-        currentPrData =  currentPrData[arrayIndexs[i]].children;
-    }
-     currentPrData['$push']= [node];
-
-    let newTree = update(tree, processedData);
-
-
-
-     return newTree;
-}
-
-
-/**
- * Добавляет новый столбец в ячейку value
+ * Добавляет новый столбец в ячейку c  номером target
  *
  * @param {value} value - ячейка, в которую будем добавлять столбец
  * @param {tree} tree дерево, куда будем добавлять
  * @return {tree} newTree, новая таблица с добавленным столбцом
  */
-export  function addСolumn(value, tree) {
+;
+export  function addСolumn(targetValue, tree) {
 
     let maxValue = getMaxValue(tree);
-    let node = new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1});
+    let target = findNode(targetValue,tree);
 
-    let currentNode = node;
-    for(let i = 1; i < getMaxDepth(tree); i++){
+    let indexesParents = tree.getParentsIndex(target);
 
-        currentNode.children.push(new Node({value: ++maxValue, color: "Gold", VerticalSpan: 1}));
+    console.log("addСolumn:indexesParents",indexesParents);
 
-        currentNode =  currentNode.children[0];
+    let currentCell =  target;
+
+    let targetNumber = 0; //тут плохое название для него это номер по порядку от родлителя той ячейки, куда будем вставлять
+    for( let i = indexesParents.length-1; i > -1 ; i--){ if(indexesParents[i] != 0) { targetNumber =  i; break; }}
+    let upperParent = tree._root.children[indexesParents[0]];
+    let newNode;
+    console.log("targetNumber ",targetNumber);
+    if(targetNumber>0) { //если таргет не в верхнем ряду. а если в верхнем?
+        newNode = new Node({value: upperParent.value, color: "Green", VerticalSpan: upperParent.VerticalSpan});
+        newNode.children = upperParent.children;
+    }
+    let cellForInsert = upperParent;
+    //мы должны пойти по детям этого узла, пока не дойдем до targetIndex
+    for( let i = 1; i <= targetNumber ; i++){
+        cellForInsert = cellForInsert.children[indexesParents[i]];
     }
 
-    let arrayIndexs = tree.getParentsIndex(value);
-    let processedData = {_root: {children:{$splice: [[arrayIndexs[0],0, node]]}}};
+  //  console.log("targetIndex ",targetIndex, " indexesParents ", indexesParents);// нашли того, куда будем вставлять новый столбец
 
-    let newTree = update(tree, processedData);
-    console.log("addСolumn, newTree: ", newTree);
-    return newTree;
+console.log("cellForInsert ",cellForInsert, " upperParent ", upperParent);// нашли того, куда будем вставлять новый столбец
+
+
+//гененрируем новые узлы для вставки
+        let node = new Node({value: ++maxValue, color: "Green", VerticalSpan: 1});
+        let currentNode = node;
+        for(let i = getDepth(cellForInsert,tree); i < getMaxDepth(tree); i++){
+            currentNode.children.push(new Node({value: ++maxValue, color: "Green", VerticalSpan: 1}));
+            currentNode =  currentNode.children[0];
+        }
+
+     cellForInsert.children.splice(indexesParents[targetNumber],0,node);
+
+            console.log("addСolumn, cellForInsert, tree ", node.value, " ",cellForInsert.value, " ",tree);
+            let newTree = addCellWithShiftRight(newNode, upperParent, tree ); // что я сюда передаю? я передаю узел, который надо вставить правее чем current. либо узел, который надо заменить текущий
+
+            console.log("addСolumn, newTree: ", newTree);
+
+            return newTree;
+            //можно было сделать так: вставить все как вчера было, а потом скопировать верзний узел и обновить его по другой функции.
 
 }
-
-/**
- * Добавляет новую строку в ячейку value
- *
- * @param {value} value - ячейка, в которую будем добавлять строку
- * @param {tree} tree дерево, куда будем добавлять
- * @return {tree} newTree, новая таблица с добавленной строкой
- *//*
-export  function addRow(value, tree) {
-     let processedData =  {_root: {children:{}}};
-
-   let maxValue = getMaxValue(tree);
-    let siblings = getSiblings(value, tree);
-    console.log("siblings", siblings );
-
-    for(let i = 0; i < siblings.length; i++) {
-        let arrayParentsIndex = tree.getParentsIndex(siblings[i].value);
-        var currentData = processedData._root.children;
-        console.log("arrayParentsIndex", siblings[i].value, arrayParentsIndex );
-        let node = new Node ({VerticalSpan: siblings[i].VerticalSpan, color: "Aqua",value: ++maxValue });
-        node.children = getParent(siblings[i],tree).children;
-        console.log("node ", siblings[i].value, node );
-
-        for(let j = 0; j < arrayParentsIndex.length-1; j++) {
-
-            currentData[arrayParentsIndex[j]] = {children: {}};
-            currentData =  currentData[arrayParentsIndex[j]].children;
-        }
-        currentData['$splice'] = [[arrayParentsIndex[arrayParentsIndex.length-1],1,node]];
-    }
-
-    console.log(processedData);
-    let newTree = update(tree, processedData);
-    return newTree;
-
-
-}*/
-
-/**
- * Добавляет новую строку в ячейку value ДЛЯ СЛОЖНОЙ ТАБЛИЦЫ*/
-    export  function addRowComplex(value, tree) {
-        let processedData =  {_root: {children:{}}};
-    var currentData;
-          let maxValue = getMaxValue(tree);
-
-
-    let targetNode = findNode(value,tree);
-    let targetDepth = getDepth(targetNode, tree);
-
-        let siblingsParents = getSiblings(getParent(targetNode,tree).value,tree);
-     console.log("siblings", siblingsParents );
-
-     for(let i = 0; i < siblingsParents.length; i++){
-
-         let parentDepth = getDepth(siblingsParents[i].children[0], tree);
-
-         //увеличиваем VS кому нужно
-         if(siblingsParents[i].children.length == 0 || targetDepth < parentDepth  ) {
-             let arrayParentsIndex = tree.getParentsIndex(siblingsParents[i].value);
-              currentData = processedData._root.children;
-
-             for(let j = 0; j < arrayParentsIndex.length-1; j++) {
-
-                 currentData[arrayParentsIndex[j]] = {children: {}};
-                 currentData =  currentData[arrayParentsIndex[j]].children;
-             }
-             currentData[arrayParentsIndex[arrayParentsIndex.length-1]] = {VerticalSpan:{$apply: function(x) {return x + 1;}}};
-
-         } else {
-             //тут мы добавляем новые ячейки
-             //новые ячейки мы куда добавляем? в siblingsParents[i]
-             let arrayParentsIndex = tree.getParentsIndex(siblingsParents[i].value);
-             currentData = processedData._root.children;
-
-             let arrNewNode = [];
-             for( let k = 0; k < siblingsParents[i].children.length; k++){
-                 arrNewNode[k] = new Node ({VerticalSpan: 1, color: "Aqua",value: ++maxValue });
-                 arrNewNode[k].children[0] = siblingsParents[i].children[k];
-             }
-
-//вот тут мы должны сгрупировать $splice нужно сформировать массив чего и куда вставлять
-             for(let j = 0; j < arrayParentsIndex.length; j++) {
-
-                 currentData[arrayParentsIndex[j]] = {children: {}};
-                 currentData =  currentData[arrayParentsIndex[j]].children;
-             }
-             currentData['$splice'] = [[0,arrNewNode.length,...arrNewNode]];
-             console.log(siblingsParents[i].value);
-         }
-
-
-
-         }
-
-    console.log("processedData", processedData);
-    let newTree = update(tree, processedData);
-    return newTree;
-
-     }
-    /*
-         for(let i = 0; i < siblings.length; i++) {
-             let arrayParentsIndex = getParentsIndex(siblings[i].value, tree);
-             var currentData = processedData._root.children;
-             console.log("arrayParentsIndex", siblings[i].value, arrayParentsIndex );
-             let node = new Node ({VerticalSpan: siblings[i].VerticalSpan, color: "Aqua",value: ++maxValue });
-             node.children = getParent(siblings[i],tree).children;
-             console.log("node ", siblings[i].value, node );
-
-             for(let j = 0; j < arrayParentsIndex.length-1; j++) {
-
-                 currentData[arrayParentsIndex[j]] = {children: {}};
-                 currentData =  currentData[arrayParentsIndex[j]].children;
-             }
-             currentData['$splice'] = [[arrayParentsIndex[arrayParentsIndex.length-1],1,node]];
-         }
-
-         console.log(processedData);
-
-
-
-
-    let newTree = update(tree, processedData);
-    return newTree;
-
-
-}*/
-
-
 
 
 /**
@@ -208,7 +78,41 @@ export  function addRow(value, tree) {
  * @param {target}
  * @return {tree}  новая таблица с добавленной ячейкой
  */
-export  function addCell(cell, target, tree) {
+export  function addCellWithShiftRight(cell, target, tree) {
+    console.log("addCellWithShiftRight,target",target.value);
+    let path =  {_root: {children:{}}};
+    let currentPath = path._root.children;
+
+    let indexesParents = tree.getParentsIndex(target);
+
+    for(let i = 0; i < indexesParents.length-1; i++) {
+        currentPath[indexesParents[i]] = {children: {}};
+        currentPath =  currentPath[indexesParents[i]].children;
+    }
+    console.log("indexesParents",indexesParents);
+    currentPath['$splice'] = [[indexesParents[indexesParents.length-1], 0, cell]];
+console.log("addCellWithShiftRight",path);
+    return update(tree, path);
+}
+/*рабочая
+export  function addCellWithShiftRight(cell, target, tree) {
+    console.log("addCellWithShiftRight,target",target.value);
+    let path =  {_root: {children:{}}};
+    let currentPath = path._root.children;
+
+    let indexesParents = tree.getParentsIndex(target);
+
+    for(let i = 0; i < indexesParents.length-1; i++) {
+        currentPath[indexesParents[i]] = {children: {}};
+        currentPath =  currentPath[indexesParents[i]].children;
+    }
+    console.log("indexesParents",indexesParents);
+    currentPath['$splice'] = [[indexesParents[indexesParents.length-1], 0, cell]];
+    console.log("addCellWithShiftRight",path);
+    return update(tree, path);
+}
+*/
+export  function addCellWithShiftDown(cell, target, tree) {
 
     let path =  {_root: {children:{}}};
     let currentPath = path._root.children;
@@ -221,7 +125,7 @@ export  function addCell(cell, target, tree) {
     }
 
     currentPath['$splice'] = [[indexesParents.pop(), 1, cell]];
-    console.log("addCell, path ",target.value, "  ", path)
+
     return update(tree, path);
 }
 
@@ -242,8 +146,6 @@ export  function incrementVerticalSpan(target, tree) {
         currentPath =  currentPath[indexesParents[i]].children;
     }
      currentPath[indexesParents.pop()] = {VerticalSpan:{$apply: function(x) {return Number(x + 1);}}};
-    console.log("incrementVerticalSpan, indexesParents.pop()",indexesParents.pop());
-    console.log("incrementVerticalSpan, path",path);
      return update(tree, path);
 }
 /**
@@ -262,25 +164,25 @@ export  function addRow(targetValue, tree) {
     for(let i = 0; i < cellsToChange.length; i++) {
 
         if (cellsToChange[i].children.length == 0 || tree.hasRow(targetRow + 1, cellsToChange[i])) {
-            console.log("incrementVerticalSpan ",cellsToChange[i].value)
+
             newTree = incrementVerticalSpan(cellsToChange[i], newTree);
-            console.log("incrementVerticalSpan,newTree ",newTree)
+
         } else {
-            console.log("addCell ",cellsToChange[i].value)
+
 
            for( let k = 0; k < cellsToChange[i].children.length; k++){
                let newCell = new Node ({VerticalSpan: 1, color: "Yellow",value: ++maxValue });
                newCell.children = [cellsToChange[i].children[k]];
 
-              newTree = addCell(newCell, cellsToChange[i].children[k], newTree);
-               console.log("addCell,newTree ",newTree)
+              newTree = addCellWithShiftDown(newCell, cellsToChange[i].children[k], newTree);
+
             }
 
 
 
         }
     }
-console.log("addRow,newTree",newTree);
+
     return newTree;
 
 

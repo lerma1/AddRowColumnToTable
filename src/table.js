@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {sortOfDepth,getDepth,traverse,getMaxDepth,hasRow} from "./tree";
+import {sortOfDepth, getDepth, traverse, getMaxDepth, hasRow, getParent,getColSpan} from "./tree";
 import './style.css'
 
 
@@ -20,18 +20,12 @@ class MyTable extends Component {
         const tdElements = [];
 
 
-        const getColSpan = (node, tree) => {
-            let countDepthChildren = 1;
-            traverse(node, (currentNode) => {if(currentNode.children.length>1)  { countDepthChildren++;}});
-            return countDepthChildren;
-        }
-
         const arrayOfDepth = sortOfDepth(this.state.tree);
 
         for ( let i=1; i < arrayOfDepth.length; i++ ) {
 
-            let tr = <tr key = {'tr'+i}>
-                            {arrayOfDepth[i].map( (currentNode,index) =>
+            let tr = <tr key = {'tr'+i + new Date()}>
+                            {arrayOfDepth[i].map( (currentNode) =>
                             <td key = {currentNode.value}
                               rowSpan = {currentNode.VerticalSpan}
                               colSpan={getColSpan(currentNode,this.state.tree)}

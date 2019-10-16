@@ -45,9 +45,11 @@ class App extends Component {
 
 
         } else    {
+            let newTree = addСolumn(value, this.state.tree);
+            this.setState({tree: newTree, isCheckedRow: false, isCheckedCol:true});
             let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
-            newHistory.data.push({text:`Вставлен столбец в ячейку № ${value}`});
-            this.setState({tree: addСolumn(value,  this.state.tree), history: newHistory,isCheckedRow: false, isCheckedCol:true});
+            newHistory.data.push({text:`Вставлен столбец в ячейку № ${value}`,tree: newTree});
+            this.setState({ history: newHistory});
 
         }
     }
@@ -75,6 +77,9 @@ class App extends Component {
     }
 
     onClickReDo(){
+        if (this.state.history.currentIndex + 1 >= this.state.history.data.length) return;
+        let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
+        this.setState({tree: newHistory.data[this.state.history.currentIndex+1],history: newHistory });
 
     }
 
@@ -96,7 +101,7 @@ class App extends Component {
              <History  history = {this.state.history}
                        key ={this.state.history.currentIndex}
                        enableUnDo = {this.state.history.currentIndex > 0}
-                       enableReDo = {(this.props.history.currentIndex + 2) < this.props.history.data.length}
+                       enableReDo = {(this.state.history.currentIndex + 1) < this.state.history.data.length}
                        onClickUnDo = {this.onClickUnDo}
                        onClickReDo = {this.onClickReDo}
 
