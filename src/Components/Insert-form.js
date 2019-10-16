@@ -1,34 +1,31 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.css'
-import './style.css'
+import '../css/style.css'
 
 
 class MyForm extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            isCheckedRow: this.props.isCheckedRow,
+            isCheckedCol: this.props.isCheckedCol,
+        }
+        this.onClickRadio = this.onClickRadio.bind(this);
 
     }
 
+    onClickRadio(event) {
+        const radioChecked = event.target.value;
+        if (radioChecked == "option1") {
+            this.setState({isCheckedCol: false, isCheckedRow: true});
+
+        } else {
+            this.setState({isCheckedCol: true, isCheckedRow: false});
+        }
+    }
 
     render() {
-
-        const onKeyUpHandler = () => {
-            let input = document.getElementById("input");
-            console.log(input.value);
-            input.value = input.value.replace('[^0-9]', "");
-            //тут должна быть какая-то другая проверка
-
-        }
-
-        let isCheckedRow = (this.props.isCheckedRow) ?
-            <input className="form-check-input" type="radio" name="exampleRadios" value="option1" checked></input> :
-            <input className="form-check-input" type="radio" name="exampleRadios" value="option1"></input>;
-        let isCheckedCol = (this.props.isCheckedCol) ?
-            <input className="form-check-input" type="radio" name="exampleRadios" value="option2" checked></input> :
-            <input className="form-check-input" type="radio" name="exampleRadios" value="option2"></input>;
-
 
         return (
 
@@ -42,18 +39,18 @@ class MyForm extends Component {
                     <div className="form-group d-inline-block">
                         <label htmlFor="input">Номер ячейки</label>
                         <input type="text" className="form-control input-number" id="input" placeholder="7"
-                               defaultValue="7" onKeyUp={onKeyUpHandler}></input>
+                               defaultValue="7" ></input>
                     </div>
 
                     <div className="d-inline-block m-4">
                         <div className="form-check">
-                            {isCheckedRow}
+                            <input className="form-check-input" type="radio" name="exampleRadios" value="option1" checked={this.state.isCheckedRow} onClick={this.onClickRadio}></input>
                             <label className="form-check-label" htmlFor="exampleRadios1">
                                 Строку
                             </label>
                         </div>
                         <div className="form-check  mb-3">
-                            {isCheckedCol}
+                            <input className="form-check-input" type="radio" name="exampleRadios" value="option2" checked={this.state.isCheckedCol} onClick={this.onClickRadio}></input>
                             <label className="form-check-label" htmlFor="exampleRadios2">
                                 Столбец
                             </label>

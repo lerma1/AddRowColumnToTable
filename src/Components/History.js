@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Button from "react-bootstrap/Button";
-import './style.css'
+import '../css/style.css'
 
 
 class History extends Component {
@@ -13,14 +13,15 @@ class History extends Component {
     }
 
 
+
     render() {
 
-        let unDoButtonEnabled = <Button className="m-2 d-inline-flex btn-success"
+        const unDoButtonEnabled = <Button className="m-2 d-inline-flex btn-success"
                                         onClick={this.props.onClickUnDo}>Отменить</Button>;
-        let unDoButtonDisabled = <Button className="m-2 d-inline-flex btn-secondary" disabled>Отменить</Button>;
-        let reDoButtonEnabled = <Button className="m-2 d-inline-flex btn-success"
+        const unDoButtonDisabled = <Button className="m-2 d-inline-flex btn-secondary" disabled>Отменить</Button>;
+        const reDoButtonEnabled = <Button className="m-2 d-inline-flex btn-success"
                                         onClick={this.props.onClickReDo}>Вернуть</Button>;
-        let reDoButtonDisabled = <Button className="m-2 d-inline-flex btn-secondary" disabled>Вставить</Button>;
+        const reDoButtonDisabled = <Button className="m-2 d-inline-flex btn-secondary" disabled>Вставить</Button>;
 
 
         const historyList = this.state.history.data.map((item, index) =>
@@ -33,9 +34,8 @@ class History extends Component {
             <div className="container card p-0">
                 <h5 className="card-header">История редактирования таблицы</h5>
                 <div className="border history-list m-3">
-                    <ul id="history-list">
+                    <ul id="history-list" scrollTop = "9999">
                         {historyList}
-
                     </ul>
 
                 </div>

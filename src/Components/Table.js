@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {sortOfDepth} from "./tree";
-import './style.css'
+import {sortOfDepth} from "../tree";
+import '../css/style.css'
 
 
 class MyTable extends Component {
@@ -13,12 +13,14 @@ class MyTable extends Component {
 
 
     render() {
-        const WIDTH = 100;
-        const HEIGHT = 100;
         const tdElements = [];
 
+        const arrayOfDepth = this.state.tree.sortOfDepth();
 
-        const arrayOfDepth = sortOfDepth(this.state.tree);
+        let widthElement = (this.props.widthWindow)/arrayOfDepth.length;
+        widthElement= (widthElement>150)? 150 : widthElement;
+        let heightElement = (this.props.heightWindow - 500)/arrayOfDepth.length;
+        heightElement= (heightElement>150)? 150 : heightElement;
 
         for (let i = 1; i < arrayOfDepth.length; i++) {
 
@@ -28,8 +30,8 @@ class MyTable extends Component {
                                                           colSpan={this.state.tree.getColSpan(currentNode)}
                                                           style={{
                                                               "background-color": currentNode.color,
-                                                              "width": ((currentNode.children.length || 1) * WIDTH) + "px",
-                                                              "height": (currentNode.VerticalSpan * HEIGHT) + "px"
+                                                              "width": ((currentNode.children.length || 1) * widthElement) + "px",
+                                                              "height": (currentNode.VerticalSpan * heightElement) + "px"
                                                           }}
                 >
                     {currentNode.value}
@@ -37,15 +39,12 @@ class MyTable extends Component {
             </tr>;
 
             tdElements.push(tr);
-
         }
 
         return (
-            <div className="container">
+            <div className="container " id = "table">
                 <table className="table-tree h4">
-
                     {tdElements}
-
                 </table>
             </div>
 

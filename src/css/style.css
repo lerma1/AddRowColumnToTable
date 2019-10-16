@@ -11,3 +11,35 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.table-tree {
+    display: block;
+    text-align: center;
+    margin: auto;
+}
+
+
+.container {
+    max-width: 600px;
+    min-width: 200px;
+    margin: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+
+}
+
+.table-tree td {
+    border: black solid;
+}
+
+.history-list {
+    height: 250px;
+    overflow-y: scroll;
+}
+.card-deck{
+    width: 900px;
+}
+.card{
+    min-width: 350px;
+}

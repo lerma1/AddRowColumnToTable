@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.css'
-import './style.css'
+import '../css/style.css'
 
 
 class ChoiceTable extends Component {
@@ -15,7 +15,7 @@ class ChoiceTable extends Component {
     }
 
     onClickChoiceTable(event) {
-        let radioChecked = event.target.value;
+        const radioChecked = event.target.value;
         if (radioChecked == "option1") {
             this.setState({indexCheckedTable: 0});
 
