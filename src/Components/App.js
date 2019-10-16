@@ -10,11 +10,15 @@ import "../css/style.css"
 class App extends Component {
     constructor(props) {
         super(props)
-        this.onClickInsertRow = this.onClickInsertRow.bind(this);
-        this.onClickInsertCol = this.onClickInsertCol.bind(this);
+        this.onClickButtonInsertRow = this.onClickButtonInsertRow.bind(this);
+        this.onClickButtonInsertCol = this.onClickButtonInsertCol.bind(this);
         this.onChoiceTable = this.onChoiceTable.bind(this);
         this.onClickUnDo = this.onClickUnDo.bind(this);
         this.onClickReDo = this.onClickReDo.bind(this);
+        this.onClickCellInsertRow = this.onClickCellInsertRow.bind(this);
+        this.onClickCellInsertCol = this.onClickCellInsertCol.bind(this);
+        //this.insertRow = this.insertRow.bind(this);
+       // this.insertCol = this.insertCol.bind(this);
 
         this.state = {
             tree: this.props.history.data[0].tree,
@@ -27,41 +31,31 @@ class App extends Component {
 
         }
     }
+    isValidate = (value) => {
 
-
-    onClickInsertRow() {
-        const value = Number(document.getElementById("input").value);
         if (!Number.isInteger(value)) {
             alert("Введите целое число - номер ячейки в таблице!");
-            return;
+            return false;
         }
 
         if (value > this.state.tree.getMaxValue()) {
             alert("Элемент с таким номером не найден!");
-            return;
+            return false;
         }
-
-            const newTree = this.state.tree.addRow(value);
-            let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
-
-            if (newHistory.currentIndex != newHistory.data.length - 1) newHistory.data.slice(0, newHistory.currentIndex);
-            newHistory.data.push({text: `Вставлена строка в ячейку № ${value}`, tree: newTree});
-
-            this.setState({tree: newTree, isCheckedRow: true, isCheckedCol: false, history: newHistory});
-
+        return true;
     }
 
-    onClickInsertCol() {
-        const value = Number(document.getElementById("input").value);
-        if (!Number.isInteger(value)) {
-            alert("Введите целое число - номер ячейки в таблице!");
-            return;
-        }
+    insertRow = (value) => {
+        const newTree = this.state.tree.addRow(value);
+        let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
 
-        if (value > this.state.tree.getMaxValue()) {
-            alert("Элемент с таким номером не найден!");
-            return;
-        }
+        if (newHistory.currentIndex != newHistory.data.length - 1) newHistory.data.slice(0, newHistory.currentIndex);
+        newHistory.data.push({text: `Вставлена строка в ячейку № ${value}`, tree: newTree});
+
+        this.setState({tree: newTree, isCheckedRow: true, isCheckedCol: false, history: newHistory});
+    }
+
+    insertCol = (value) => {
         const newTree = this.state.tree.addColumn(value);
         let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice()};
 
@@ -69,6 +63,29 @@ class App extends Component {
         newHistory.data.push({text: `Вставлен столбец в ячейку № ${value}`, tree: newTree});
 
         this.setState({tree: newTree, isCheckedRow: false, isCheckedCol: true, history: newHistory});
+    }
+
+    onClickCellInsertRow(event) {
+        const value = Number(event.target.id);
+        this.insertRow(value);
+    }
+
+    onClickCellInsertCol(event) {
+        const value = Number(event.target.id);
+        this.insertCol(value);
+    }
+
+    onClickButtonInsertRow() {
+            const value = Number(document.getElementById("input").value);
+            if(!this.isValidate(value))return;
+            this.insertRow(value);
+
+    }
+
+    onClickButtonInsertCol() {
+        const value = Number(document.getElementById("input").value);
+        if(!this.isValidate(value))return;
+        this.insertCol(value);
     }
 
     onChoiceTable(value) {
@@ -126,12 +143,13 @@ class App extends Component {
 
                     <MyTable tree={this.state.history.data[this.state.history.currentIndex].tree}
                              key={this.state.history.currentIndex}
+                             onClickCellInsertRow={this.onClickCellInsertRow} onClickCellInsertCol={this.onClickCellInsertCol}
 
                     />
                     <div className="pl-5">
                         <div className="d-block ">
 
-                            <MyForm onClickInsertCol={this.onClickInsertCol} onClickInsertRow={this.onClickInsertRow} isCheckedRow={this.state.isCheckedRow}
+                            <MyForm onClickInsertCol={this.onClickButtonInsertCol} onClickInsertRow={this.onClickButtonInsertRow} isCheckedRow={this.state.isCheckedRow}
                                     isCheckedCol={this.state.isCheckedCol}/>
 
 
