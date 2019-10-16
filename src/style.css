@@ -16,11 +16,11 @@
 }
 
 .table-tree td {
-   border: black solid;
+    border: black solid;
 }
 
 
-.history-list{
+.history-list {
     height: 250px;
     overflow-y: scroll;
 }

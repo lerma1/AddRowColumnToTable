@@ -1,20 +1,15 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
-import {addСolumn} from "./immutable-tree";
 import 'bootstrap/dist/css/bootstrap.css'
 import './style.css'
 
 
 class MyForm extends Component {
-   constructor(props){
+    constructor(props) {
         super(props)
-       this.state = {
-
-       }
+        this.state = {}
 
     }
-
-
 
 
     render() {
@@ -27,14 +22,15 @@ class MyForm extends Component {
 
         }
 
-        let isCheckedRow = (this.props.isCheckedRow)? <input className="form-check-input" type="radio" name="exampleRadios"  value="option1" checked></input> :
-            <input className="form-check-input" type="radio" name="exampleRadios"  value="option1"></input>;
-        let isCheckedCol = (this.props.isCheckedCol)? <input className="form-check-input" type="radio" name="exampleRadios"  value="option2" checked></input> :
-            <input className="form-check-input" type="radio" name="exampleRadios"  value="option2"></input>;
+        let isCheckedRow = (this.props.isCheckedRow) ?
+            <input className="form-check-input" type="radio" name="exampleRadios" value="option1" checked></input> :
+            <input className="form-check-input" type="radio" name="exampleRadios" value="option1"></input>;
+        let isCheckedCol = (this.props.isCheckedCol) ?
+            <input className="form-check-input" type="radio" name="exampleRadios" value="option2" checked></input> :
+            <input className="form-check-input" type="radio" name="exampleRadios" value="option2"></input>;
 
 
         return (
-
 
 
             <div className="container card p-0">
@@ -45,31 +41,30 @@ class MyForm extends Component {
 
                     <div className="form-group d-inline-block">
                         <label htmlFor="input">Номер ячейки</label>
-                        <input type="text"  className="form-control input-number"  id="input" placeholder="7" defaultValue="7" onKeyUp={onKeyUpHandler}></input>
+                        <input type="text" className="form-control input-number" id="input" placeholder="7"
+                               defaultValue="7" onKeyUp={onKeyUpHandler}></input>
                     </div>
 
                     <div className="d-inline-block m-4">
-                    <div className="form-check">
-                       {isCheckedRow}
+                        <div className="form-check">
+                            {isCheckedRow}
                             <label className="form-check-label" htmlFor="exampleRadios1">
                                 Строку
                             </label>
-                    </div>
-                    <div className="form-check  mb-3">
-                        {isCheckedCol}
+                        </div>
+                        <div className="form-check  mb-3">
+                            {isCheckedCol}
                             <label className="form-check-label" htmlFor="exampleRadios2">
                                 Столбец
                             </label>
+                        </div>
+
+                        <Button variant="success" className="" onClick={this.props.onClickInsert}>Вставить</Button>
                     </div>
-
-                    <Button variant="success" className="" onClick = {this.props.onClickInsert}>Вставить</Button>
-                </div>
                 </div>
 
 
-                </div>
-
-
+            </div>
 
 
         );
