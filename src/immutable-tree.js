@@ -23,6 +23,60 @@ export  function addСolumn(targetValue, tree) {
 
     let maxValue = getMaxValue(tree);
     let target = findNode(targetValue,tree);
+    let indexesParents = tree.getParentsIndex(target);
+    let currentCell =  target;
+
+    let targetNumber = 0; //тут плохое название для него это номер по порядку от родлителя той ячейки, куда будем вставлять
+    for( let i = indexesParents.length-1; i > -1 ; i--){ if(indexesParents[i] != 0) { targetNumber =  i;  break; }currentCell = getParent(currentCell,tree);}
+    let cellForInsert = currentCell;
+
+
+
+//гененрируем новые узлы для вставки
+        let node = new Node({value: ++maxValue, color: "Green", VerticalSpan: 1});
+        let currentNode = node;
+        for(let i = getDepth(cellForInsert,tree); i < getMaxDepth(tree); i++){
+            currentNode.children.push(new Node({value: ++maxValue, color: "Green", VerticalSpan: 1}));
+            currentNode =  currentNode.children[0];
+        }
+
+            console.log("addСolumn, cellForInsert, tree ", node.value, " ",cellForInsert.value, " ",tree);
+            let newTree = addCellWithShiftRight(node, cellForInsert, tree ); // что я сюда передаю? я передаю узел, который надо вставить правее чем current. либо узел, который надо заменить текущий
+
+            console.log("addСolumn, newTree: ", newTree);
+
+/*if (targetNumber!=0){
+    let upperParent = newTree._root.children[indexesParents[0]];
+    let newNode = new Node({value: upperParent.value, color: "Green", VerticalSpan: upperParent.VerticalSpan});
+    newNode.children = upperParent.children;
+
+    newTree = updateUpperCell(newNode, indexesParents[0], newTree );
+}*/
+
+
+            return newTree;
+            //можно было сделать так: вставить все как вчера было, а потом скопировать верзний узел и обновить его по другой функции.
+
+}
+
+export  function updateUpperCell(cell, position, tree) {
+    console.log("updateCell,position",position);
+    let path =  {_root: {children:{}}};
+    let currentPath = path._root.children;
+  //      currentPath[position] = {children: {}};
+ //       currentPath =  currentPath[position].children;
+
+
+    currentPath['$splice'] = [[position, 1, cell]];
+    console.log("updateCell",path);
+    return update(tree, path);
+}
+
+/*** попытка
+export  function addСolumn(targetValue, tree) {
+
+    let maxValue = getMaxValue(tree);
+    let target = findNode(targetValue,tree);
 
     let indexesParents = tree.getParentsIndex(target);
 
@@ -45,31 +99,30 @@ export  function addСolumn(targetValue, tree) {
         cellForInsert = cellForInsert.children[indexesParents[i]];
     }
 
-  //  console.log("targetIndex ",targetIndex, " indexesParents ", indexesParents);// нашли того, куда будем вставлять новый столбец
+    //  console.log("targetIndex ",targetIndex, " indexesParents ", indexesParents);// нашли того, куда будем вставлять новый столбец
 
-console.log("cellForInsert ",cellForInsert, " upperParent ", upperParent);// нашли того, куда будем вставлять новый столбец
+    console.log("cellForInsert ",cellForInsert, " upperParent ", upperParent);// нашли того, куда будем вставлять новый столбец
 
 
 //гененрируем новые узлы для вставки
-        let node = new Node({value: ++maxValue, color: "Green", VerticalSpan: 1});
-        let currentNode = node;
-        for(let i = getDepth(cellForInsert,tree); i < getMaxDepth(tree); i++){
-            currentNode.children.push(new Node({value: ++maxValue, color: "Green", VerticalSpan: 1}));
-            currentNode =  currentNode.children[0];
-        }
+    let node = new Node({value: ++maxValue, color: "Green", VerticalSpan: 1});
+    let currentNode = node;
+    for(let i = getDepth(cellForInsert,tree); i < getMaxDepth(tree); i++){
+        currentNode.children.push(new Node({value: ++maxValue, color: "Green", VerticalSpan: 1}));
+        currentNode =  currentNode.children[0];
+    }
 
-     cellForInsert.children.splice(indexesParents[targetNumber],0,node);
+    cellForInsert.children.splice(indexesParents[targetNumber],0,node);
 
-            console.log("addСolumn, cellForInsert, tree ", node.value, " ",cellForInsert.value, " ",tree);
-            let newTree = addCellWithShiftRight(newNode, upperParent, tree ); // что я сюда передаю? я передаю узел, который надо вставить правее чем current. либо узел, который надо заменить текущий
+    console.log("addСolumn, cellForInsert, tree ", node.value, " ",cellForInsert.value, " ",tree);
+    let newTree = addCellWithShiftRight(newNode, upperParent, tree ); // что я сюда передаю? я передаю узел, который надо вставить правее чем current. либо узел, который надо заменить текущий
 
-            console.log("addСolumn, newTree: ", newTree);
+    console.log("addСolumn, newTree: ", newTree);
 
-            return newTree;
-            //можно было сделать так: вставить все как вчера было, а потом скопировать верзний узел и обновить его по другой функции.
+    return newTree;
+    //можно было сделать так: вставить все как вчера было, а потом скопировать верзний узел и обновить его по другой функции.
 
-}
-
+}*/
 
 /**
  * Добавляет ячейку cell в ячейку target

@@ -25,10 +25,10 @@ class MyTable extends Component {
         for ( let i=1; i < arrayOfDepth.length; i++ ) {
 
             let tr = <tr key = {'tr'+i + new Date()}>
-                            {arrayOfDepth[i].map( (currentNode) =>
-                            <td key = {currentNode.value}
+                            {arrayOfDepth[i].map( (currentNode) =>{
+                                console.log("render",currentNode.value);return  ( <td key = {currentNode.value}
                               rowSpan = {currentNode.VerticalSpan}
-                              colSpan={getColSpan(currentNode,this.state.tree)}
+                              colSpan={this.state.tree.getColSpan(currentNode,arrayOfDepth)}
                               style={{"background-color": currentNode.color,
                                   "width": ((currentNode.children.length||1)*WIDTH) + "px",
                                   "height":(currentNode.VerticalSpan*HEIGHT)+ "px"}}
@@ -36,7 +36,7 @@ class MyTable extends Component {
                                 {currentNode.value} Depth:
                                 {getDepth(currentNode,this.state.tree)} NumbersRow:
                                 {this.state.tree.getNumbersRow(currentNode)}
-                            </td> )}
+                            </td> )})}
                          </tr>;
 
             tdElements.push(tr);

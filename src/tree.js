@@ -202,6 +202,20 @@ Tree.prototype.hasRow =  function(row, node)  {
     return (arrRows.findIndex((current)=>current == row)) != -1;
 }
 
+Tree.prototype.getLowerCells = function() {
+   // дойти до нижнего узла любого, получить его arrRows и взять последний
+    let current = this._root.children[0];
+    while(current.children.length != 0) {current = current.children[0];}
+    let Rows = this.getNumbersRow(current);
+    let lowerRow = Rows[Rows.length-1];//нашли самый нижний уровень
+
+    let lowerCells = [];
+
+    this.traverse((node)=>{ if (this.hasRow(lowerRow,node))lowerCells.push(node);})
+     return lowerCells;
+
+}
+/*
 export const getColSpan = (node, tree) => { //НЕ РАБОТАЕТ!!!!
     let countDepthChildren = 1;
 
@@ -213,4 +227,30 @@ export const getColSpan = (node, tree) => { //НЕ РАБОТАЕТ!!!!
     });
 
     return countDepthChildren;
+}*/
+
+Tree.prototype.isParentOfChild =  function (parent, child) {
+    let currentNode = child;
+    while (getParent(currentNode, this) != undefined) {
+        if (getParent(currentNode, this) == parent) return true;
+        currentNode = getParent(currentNode, this);
+    }
+    return false;
+}
+
+Tree.prototype.getColSpan =  function (node, arrayOfDepth)  {
+    let countDepthChildren = 0;
+    console.log("getColSpan, node", node.value);
+    let lowerCells =  this.getLowerCells();
+
+
+   for(let i = 0; i < lowerCells.length; i++) {
+       console.log("getColSpan, node", node.value, "lowerCells[i]",lowerCells[i].value,"isParentOfChild", this.isParentOfChild(node, lowerCells[i]) );
+    if(this.isParentOfChild(node, lowerCells[i])){ countDepthChildren++;}
+}
+
+    console.log("getColSpan, countDepthChildren", countDepthChildren);
+
+//найти все узлы, которые являються ее потомками и имеют нужную глубину
+   return countDepthChildren;
 }
