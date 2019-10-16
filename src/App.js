@@ -3,16 +3,16 @@ import MyTable from "./table";
 import MyForm from "./Form"
 import History from "./History";
 import ChoiceTable from "./ChoiceTable";
-import {addСolumn,addRow,addRowComplex} from "./immutable-tree";
+import {addСolumn,addRow} from "./immutable-tree";
 import {getMaxValue} from "./tree";
-import {tree,easyTree,complexTree} from "./index";
+import {easyTree,complexTree} from "./index";
 
 
 class App extends Component {
   constructor(props){
     super(props)
-      this.onClickHandler = this.onClickHandler.bind(this);
-      this.onChoiseTable = this.onChoiseTable.bind(this);
+      this.onClickInsert = this.onClickInsert.bind(this);
+      this.onChoiceTable = this.onChoiceTable.bind(this);
       this.onClickUnDo = this.onClickUnDo.bind(this);
       this.onClickReDo = this.onClickReDo.bind(this);
 
@@ -23,51 +23,54 @@ class App extends Component {
           enableReDo: false,
           isCheckedRow: true,
           isCheckedCol: false,
+          indexCheckedTable: 1,
       }
   }
 
-    onClickHandler(){
+    onClickInsert(){
         let value = Number(document.getElementById("input").value);
         if(value > getMaxValue(this.state.tree)) {alert("Элемент с таким номером не найден!"); return;}
 
         let history = document.getElementById("history-list");
 
         let  radio = document.getElementsByName("exampleRadios");
+
         if(radio[0].checked){
+                   let newTree = addRow(value, this.state.tree);
+                   let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
 
+                   if (newHistory.currentIndex != newHistory.data.length-1) newHistory.data.slice(0, newHistory.currentIndex);
+                    newHistory.data.push({text:`Вставлена строка в ячейку № ${value}`,tree: newTree});
 
-           let newTree = addRow(value, this.state.tree);
-           this.setState({tree: newTree, isCheckedRow: true, isCheckedCol:false});
-            let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
-            newHistory.data.push({text:`Вставлена строка в ячейку № ${value}`,tree: newTree});
-           this.setState({ history: newHistory});
+                   this.setState({tree: newTree, isCheckedRow: true, isCheckedCol:false, history: newHistory});
 
+            } else    { let newTree = addСolumn(value, this.state.tree);
+                        let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
 
+                        if (newHistory.currentIndex != newHistory.data.length-1) newHistory.data.slice(0, newHistory.currentIndex);
+                        newHistory.data.push({text:`Вставлен столбец в ячейку № ${value}`,tree: newTree});
 
-        } else    {
-            let newTree = addСolumn(value, this.state.tree);
-            this.setState({tree: newTree, isCheckedRow: false, isCheckedCol:true});
-            let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
-            newHistory.data.push({text:`Вставлен столбец в ячейку № ${value}`,tree: newTree});
-            this.setState({ history: newHistory});
+                        this.setState({tree: newTree, isCheckedRow: false, isCheckedCol:true, history: newHistory});
 
-        }
+            }
     }
 
-    onChoiseTable(){
+    onChoiceTable(){
         let radio = document.getElementsByName("choice-table");
+
         if(radio[0].checked){
-            let newTree = easyTree;
-            this.setState({tree: newTree});
-            let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
-            newHistory.data.push({text:`Создана Таблица №1`,tree: newTree});
-            this.setState({ history: newHistory});
+                let newTree = easyTree;
+                let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
+                newHistory.data.push({text:`Создана Таблица №1`,tree: newTree});
+
+                this.setState({ tree: newTree, history: newHistory, indexCheckedTable: 0});
+
         } else    { let newTree = complexTree;
-            this.setState({tree: newTree});
-            let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
-            newHistory.data.push({text:`Создана таблица №2`,tree: newTree});
-            this.setState({ history: newHistory});}
-    }
+                    let newHistory = {currentIndex: this.state.history.currentIndex+1, data: this.state.history.data.slice()};
+                    newHistory.data.push({text:`Создана таблица №2`,tree: newTree});
+
+                    this.setState({ history: newHistory, tree: newTree, indexCheckedTable: 1 });}
+            }
 
     onClickUnDo(){
 
@@ -95,8 +98,8 @@ class App extends Component {
              </div>
              <div className="card-deck">
                  <div className="card border-0">
-                     <ChoiceTable  style={{"width":"100px"}} onChoiseTable={this.onChoiseTable}/>
-                     <MyForm onClickHandler={this.onClickHandler}  isCheckedRow={this.state.isCheckedRow} isCheckedCol = {this.state.isCheckedCol}/>
+                     <ChoiceTable  style={{"width":"100px"}} onChoiceTable={this.onChoiceTable} indexCheckedTable={this.state.indexCheckedTable}/>
+                     <MyForm onClickInsert={this.onClickInsert}  isCheckedRow={this.state.isCheckedRow} isCheckedCol = {this.state.isCheckedCol}/>
                  </div>
              <History  history = {this.state.history}
                        key ={this.state.history.currentIndex}

@@ -18,7 +18,7 @@ Tree.prototype.traverse = function(callback) {
     })(this._root);
 
 };
-
+/*
  export const traverse = function(node2, callback) {
      if(!node2){alert("1");return 0;}
 
@@ -27,7 +27,7 @@ Tree.prototype.traverse = function(callback) {
         callback(currentNode);
     })(node2);
 
-};
+};*/
 
 
 Tree.prototype.contains = function(callback, traversal) {
@@ -141,19 +141,7 @@ export const getMaxValue = (tree) => {
     return  maxValue;
     };
 
-/*Tree.prototype.formPathToParent = function (target) {
-    let path =  {_root: {}};
-    let currentPath = path._root;
-    let indexesParents = this.getParentsIndex(target);
 
-    for(let i = 0; i < indexesParents.length-1; i++) {
-        console.log(indexesParents);
-        currentPath.children = [];
-        currentPath[indexesParents[i]] = {};
-        currentPath =  currentPath[indexesParents[i]];
-    }
-    return path;
-}*/
 
 Tree.prototype.getParentsIndex  = function (node)  {
     let arrIndex = [];
@@ -203,7 +191,7 @@ Tree.prototype.hasRow =  function(row, node)  {
 }
 
 Tree.prototype.getLowerCells = function() {
-   // дойти до нижнего узла любого, получить его arrRows и взять последний
+
     let current = this._root.children[0];
     while(current.children.length != 0) {current = current.children[0];}
     let Rows = this.getNumbersRow(current);
@@ -215,19 +203,7 @@ Tree.prototype.getLowerCells = function() {
      return lowerCells;
 
 }
-/*
-export const getColSpan = (node, tree) => { //НЕ РАБОТАЕТ!!!!
-    let countDepthChildren = 1;
 
-
-    traverse(node, (currentNode) => {
-        if (currentNode.children.length > 1) {
-            countDepthChildren++;
-        }
-    });
-
-    return countDepthChildren;
-}*/
 
 Tree.prototype.isParentOfChild =  function (parent, child) {
     let currentNode = child;
@@ -240,17 +216,14 @@ Tree.prototype.isParentOfChild =  function (parent, child) {
 
 Tree.prototype.getColSpan =  function (node, arrayOfDepth)  {
     let countDepthChildren = 0;
-    console.log("getColSpan, node", node.value);
+
     let lowerCells =  this.getLowerCells();
 
 
    for(let i = 0; i < lowerCells.length; i++) {
-       console.log("getColSpan, node", node.value, "lowerCells[i]",lowerCells[i].value,"isParentOfChild", this.isParentOfChild(node, lowerCells[i]) );
+
     if(this.isParentOfChild(node, lowerCells[i])){ countDepthChildren++;}
 }
 
-    console.log("getColSpan, countDepthChildren", countDepthChildren);
-
-//найти все узлы, которые являються ее потомками и имеют нужную глубину
    return countDepthChildren;
 }

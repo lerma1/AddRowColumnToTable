@@ -67,9 +67,9 @@ testEasyTree();
 
 
 
-let newTree = addСolumn(11,complexTree);
-var history = {currentIndex:0, data:[{text:"Создана таблица",tree: newTree}]};
+//let newTree = addСolumn(11,complexTree);
+var history = {currentIndex:0, data:[{text:"Создана таблица №2", tree: complexTree}]};
 
-ReactDOM.render(<App tree={newTree} history = {history}/>, document.getElementById('root'));
+ReactDOM.render(<App tree={complexTree} history = {history}/>, document.getElementById('root'));
 
 

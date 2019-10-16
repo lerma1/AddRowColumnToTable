@@ -62,7 +62,7 @@ class MyForm extends Component {
                             </label>
                     </div>
 
-                    <Button variant="success" className="" onClick = {this.props.onClickHandler}>Вставить</Button>
+                    <Button variant="success" className="" onClick = {this.props.onClickInsert}>Вставить</Button>
                 </div>
                 </div>
 
