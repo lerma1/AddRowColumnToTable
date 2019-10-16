@@ -39,8 +39,8 @@ class MyTable extends Component {
                 {arrayOfDepth[i].map((currentNode) =>
                     <OverlayTrigger trigger="click" placement="right" overlay={
                         <Tooltip id={`tooltip-right`}>
-                            <button id={currentNode.value} onClick={this.props.onClickCellInsertRow} className="btn btn-outline-light border-0">Вставить строку</button>
-                            <button id={currentNode.value} onClick={this.props.onClickCellInsertCol} className="btn btn-outline-light border-0">Вставить столбец</button>
+                            <button id={currentNode.value} onClick={this.props.onClickCellInsertRow} className="btn btn-outline-light border-0 d-block">Вставить строку</button>
+                            <button id={currentNode.value} onClick={this.props.onClickCellInsertCol} className="btn btn-outline-light border-0 d-block">Вставить столбец</button>
                         </Tooltip>
                     } key={currentNode.value}><td key={currentNode.value}
                                                           rowSpan={currentNode.VerticalSpan}

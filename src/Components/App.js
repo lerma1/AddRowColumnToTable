@@ -149,9 +149,6 @@ class App extends Component {
                     <div className="pl-5">
                         <div className="d-block ">
 
-                            <MyForm onClickInsertCol={this.onClickButtonInsertCol} onClickInsertRow={this.onClickButtonInsertRow} isCheckedRow={this.state.isCheckedRow}
-                                    isCheckedCol={this.state.isCheckedCol}/>
-
 
                         </div>
                         <History history={this.state.history}

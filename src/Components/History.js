@@ -31,9 +31,9 @@ class History extends Component {
         );
 
         return (
-            <div className="container card p-0">
+            <div className=" card history  p-0 m-auto">
                 <div className="card-header d-flex justify-content-between ">
-                    <div className="d-inline-block h5 mt-auto mb-auto">История редактирования таблицы</div>
+                    <div className="d-inline-block h5 mt-auto mb-auto">История</div>
                     <div className="">
                         {(this.props.enableUnDo) ? unDoButtonEnabled : unDoButtonDisabled}
                         {(this.props.enableReDo) ? reDoButtonEnabled : reDoButtonDisabled}

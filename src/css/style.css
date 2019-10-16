@@ -22,7 +22,10 @@
     border: black solid;
    width: content-box;
 }
-
+.history{
+    display: inline-block;
+    width: 500px;
+}
 .history-list {
     height: 150px;
     overflow-y: scroll;

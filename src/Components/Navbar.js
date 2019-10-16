@@ -15,10 +15,9 @@ export default class MyNavbar extends Component {
         return (
 
             <Navbar collapseOnSelect expand="lg" bg="info" variant="dark" className ="d-flex justify-content-between" >
-                <Navbar.Brand >Вставка столбцов/строк</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className ="d-inline-block ml-auto">
+                    <Nav className ="d-inline-block mr-auto ml-auto">
                         <ToggleButtonGroup className="" type="radio" name="options" defaultValue={3}   onChange={this.props.onChoiceTable} >
                             <ToggleButton variant="outline-light" value={1}>Таблица 1</ToggleButton>
                             <ToggleButton variant="outline-light" value={2}>Таблица 2</ToggleButton>
