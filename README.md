@@ -22,9 +22,9 @@
 
 ### Инструкция
 
-* Для того, чтобы запустить реализацию, перейдите [по ссылке на githab](https://lerma1.github.io/)
+* Для того, чтобы запустить реализацию, перейдите [по ссылке на github](https://lerma1.github.io/)
 
-* Код можно посмотреть [в этом проекте на githab](https://github.com/lerma1/AddRowColumnToTable)
+* Код можно посмотреть [в этом проекте на github](https://github.com/lerma1/AddRowColumnToTable)
 
 ### Используемые библиотеки
 
