@@ -19,29 +19,7 @@ Tree.prototype.traverse = function (callback) {
         callback(currentNode);
     })(this._root);
 };
-//вызываеться в каждом узле дерева
-Tree.prototype.contains = function(callback, traversal) {
-    traversal.call(this, callback);
-};
 
-Tree.prototype.add = function(data, toData, traversal) {
-    var child = new Node(data),
-        parent = null,
-        callback = function(node) {
-            if (node.value === toData) {
-                parent = node;
-            }
-        };
-
-    this.contains(callback, traversal);
-
-    if (parent) {
-        parent.children.push(child);
-       // child.parent = parent;
-    } else {
-        throw new Error('Cannot add node to a non-existent parent.');
-    }
-};
 /**
  * Добавляет новый столбец позицию - слева от выбранной ячейки
  *

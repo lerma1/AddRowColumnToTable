@@ -42,3 +42,6 @@
     box-sizing: content-box;
 
 }
+.btn-outline-light:hover{
+    background-color: rgba(1,255,1,1);
+}
