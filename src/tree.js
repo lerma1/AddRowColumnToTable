@@ -6,9 +6,14 @@ export function Node(data = {value: 0, color: "white", VerticalSpan: 1}) {
     this.children = [];
 }
 
-export function Tree(data = {value: 0, color: "white", VerticalSpan: 1} ) {
-    let node = new Node(data);
-    this._root = node;
+export function Tree(json, data = {value: 0, color: "white", VerticalSpan: 1} ) {
+    if (json) {
+        this._root = JSON.parse(json)._root;
+    } else {
+        let node = new Node(data);
+        this._root = node;
+    }
+
 }
 
 Tree.prototype.traverse = function (callback) {
