@@ -24,7 +24,7 @@
 ### Инструкция
 
 * Для того, чтобы запустить реализацию, перейдите [по ссылке на github](https://lerma1.github.io/)
-
+* Документацию можно посмотреть здесь https://drive.google.com/open?id=1ep6uWeJYVtc1fANmtHC0NguwQfJ0Vqfa
 * Код можно посмотреть [в этом проекте на github](https://github.com/lerma1/AddRowColumnToTable)
 
 ### Используемые библиотеки
