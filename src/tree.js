@@ -2,18 +2,17 @@ import update from 'react-addons-update';
 
 
 export function Node(data = {value: 0, color: "white", VerticalSpan: 1}) {
-    ({value:this.value, color: this.color, VerticalSpan: this.VerticalSpan} = data);
+    ({value: this.value, color: this.color, VerticalSpan: this.VerticalSpan} = data);
     this.children = [];
 }
 
-export function Tree(json, data = {value: 0, color: "white", VerticalSpan: 1} ) {
+export function Tree(json, data = {value: 0, color: "white", VerticalSpan: 1}) {
     if (json) {
         this._root = JSON.parse(json)._root;
     } else {
         let node = new Node(data);
         this._root = node;
     }
-
 }
 
 Tree.prototype.traverse = function (callback) {
@@ -31,7 +30,7 @@ Tree.prototype.traverse = function (callback) {
  * @param {number} value ячейки, слева от которой будем добавлять столбец
  * @return {tree}  новая таблица с добавленным столбцом
  */
-Tree.prototype.addColumn = function(targetValue) {
+Tree.prototype.addColumn = function (targetValue) {
 
     let maxValue = this.getMaxValue();
     let currentCell = this.findNode(targetValue);
@@ -46,7 +45,7 @@ Tree.prototype.addColumn = function(targetValue) {
 
     let node = new Node({value: ++maxValue, color: "Green", VerticalSpan: 1});
     let currentNode = node;
-    for (let i = this.getDepth(cellForInsert ); i < this.getMaxDepth(); i++) {
+    for (let i = this.getDepth(cellForInsert); i < this.getMaxDepth(); i++) {
         currentNode.children.push(new Node({value: ++maxValue, color: "Green", VerticalSpan: 1}));
         currentNode = currentNode.children[0];
     }
@@ -62,7 +61,7 @@ Tree.prototype.addColumn = function(targetValue) {
  * @param {node} ячейка, которуб будем добавлять
  * @return {tree}  новая таблица с добавленной ячейкой
  */
-Tree.prototype.addCellWithShiftRight = function(cell, target) {
+Tree.prototype.addCellWithShiftRight = function (cell, target) {
 
     const path = {_root: {children: {}}};
     let currentPath = path._root.children;
@@ -87,7 +86,7 @@ Tree.prototype.addCellWithShiftRight = function(cell, target) {
  * @return {tree}  новая таблица с добавленной ячейкой
  */
 
-Tree.prototype.addCellWithShiftDown = function(cell, target) {
+Tree.prototype.addCellWithShiftDown = function (cell, target) {
 
     const path = {_root: {children: {}}};
     let currentPath = path._root.children;
@@ -110,7 +109,7 @@ Tree.prototype.addCellWithShiftDown = function(cell, target) {
  * @param {node} ячейка, спан которой будет увеличен
  * @return {tree}  новая таблица с добавленной ячейкой
  */
-Tree.prototype.incrementVerticalSpan = function(target) {
+Tree.prototype.incrementVerticalSpan = function (target) {
     const path = {_root: {children: {}}};
     let currentPath = path._root.children;
 
@@ -137,12 +136,12 @@ Tree.prototype.incrementVerticalSpan = function(target) {
  * @param {number} value ячейки, выше которой будем добавлять строку
  * @return {tree}  новая таблица с добавленной ячейкой
  */
-Tree.prototype.addRow = function(targetValue) {
-    let newTree = update(this,{});
+Tree.prototype.addRow = function (targetValue) {
+    let newTree = update(this, {});
     let maxValue = this.getMaxValue();
-
     const targetRow = this.getDepth(this.findNode(targetValue)) - 1;
     let cellsToChange = [];
+
     this.traverse((node) => {
         if (this.hasRow(targetRow, node)) {
             cellsToChange.push(node);
@@ -152,41 +151,36 @@ Tree.prototype.addRow = function(targetValue) {
     for (let i = 0; i < cellsToChange.length; i++) {
 
         if (cellsToChange[i].children.length == 0 || this.hasRow(targetRow + 1, cellsToChange[i])) {
-
             newTree = newTree.incrementVerticalSpan(cellsToChange[i]);
+            continue;
+        }
 
-        } else {
+        for (let k = 0; k < cellsToChange[i].children.length; k++) {
+            let newCell = new Node({VerticalSpan: 1, color: "Yellow", value: ++maxValue});
+            newCell.children = [cellsToChange[i].children[k]];
 
-            for (let k = 0; k < cellsToChange[i].children.length; k++) {
-                let newCell = new Node({VerticalSpan: 1, color: "Yellow", value: ++maxValue});
-                newCell.children = [cellsToChange[i].children[k]];
-
-                newTree = newTree.addCellWithShiftDown(newCell, cellsToChange[i].children[k]);
-            }
+            newTree = newTree.addCellWithShiftDown(newCell, cellsToChange[i].children[k]);
         }
     }
     return newTree;
-
-
 }
 
 
-Tree.prototype.getParent = function(node)  {
+Tree.prototype.getParent = function (node) {
     let parent;
     this.traverse((currentNode) => {
         const isParent = currentNode.children.find((item) => {
             return item == node;
         });
-        if (isParent != undefined) parent = currentNode;
+        if (isParent) parent = currentNode;
     });
     return parent;
 }
 
-Tree.prototype.getDepth = function(node) {
-    let depth = 0;
-    let currentNode = node;
+Tree.prototype.getDepth = function (node) {
+    let depth = 0, currentNode = node;
 
-    while (currentNode != undefined) {
+    while (currentNode) {
         currentNode = this.getParent(currentNode);
         if (currentNode) depth += currentNode.VerticalSpan;
     }
@@ -194,7 +188,7 @@ Tree.prototype.getDepth = function(node) {
     return depth;
 }
 
-Tree.prototype.sortOfDepth = function()  {
+Tree.prototype.sortOfDepth = function () {
     let arrayOfDepth = [];
     this.traverse((node) => {
         const depth = this.getDepth(node);
@@ -205,7 +199,7 @@ Tree.prototype.sortOfDepth = function()  {
     return arrayOfDepth;
 }
 
-Tree.prototype.getMaxDepth = function()  {
+Tree.prototype.getMaxDepth = function () {
     let maxDepth = 0;
     this.traverse((node) => {
         if (this.getDepth(node) > maxDepth) {
@@ -215,7 +209,7 @@ Tree.prototype.getMaxDepth = function()  {
     return maxDepth;
 };
 
-Tree.prototype.getMaxValue = function() {
+Tree.prototype.getMaxValue = function () {
     let maxValue = 0;
     this.traverse((node) => {
         if (node.value > maxValue) {
@@ -231,23 +225,22 @@ Tree.prototype.getParentsIndex = function (node) {
     let currentValue = node.value;
     let currentNode = this.getParent(node);
 
-    while (currentNode != undefined) {
+    while (currentNode) {
         arrIndex.unshift(currentNode.children.findIndex((element) => element.value == currentValue));
         currentValue = currentNode.value;
         currentNode = this.getParent(currentNode);
-
     }
     return arrIndex;
 };
 
-Tree.prototype.findNode = function(value) {
-    let foundNode = null;
+Tree.prototype.findNode = function (value) {
+    let foundNode;
     this.traverse((node) => {
         if (node.value === value) {
             foundNode = node;
         }
     });
-    return (foundNode === null) ? -1 : foundNode;
+    return foundNode || -1;
 };
 
 Tree.prototype.getNumbersRow = function (node) {
@@ -261,7 +254,6 @@ Tree.prototype.getNumbersRow = function (node) {
 
 Tree.prototype.hasRow = function (row, node) {
     let arrRows = this.getNumbersRow(node);
-
     return (arrRows.findIndex((current) => current == row)) != -1;
 }
 
@@ -272,8 +264,7 @@ Tree.prototype.getLowerCells = function () {
         current = current.children[0];
     }
     let Rows = this.getNumbersRow(current);
-    let lowerRow = Rows[Rows.length - 1];//нашли самый нижний уровень
-
+    let lowerRow = Rows[Rows.length - 1];
     let lowerCells = [];
 
     this.traverse((node) => {
@@ -286,14 +277,14 @@ Tree.prototype.getLowerCells = function () {
 
 Tree.prototype.isParentOfChild = function (parent, child) {
     let currentNode = child;
-    while (this.getParent(currentNode ) != undefined) {
+    while (this.getParent(currentNode) != undefined) {
         if (this.getParent(currentNode) == parent) return true;
-        currentNode = this.getParent(currentNode );
+        currentNode = this.getParent(currentNode);
     }
     return false;
 }
 
-Tree.prototype.getColSpan = function (node, arrayOfDepth) {
+Tree.prototype.getColSpan = function (node) {
     let countDepthChildren = 0;
     const lowerCells = this.getLowerCells();
 

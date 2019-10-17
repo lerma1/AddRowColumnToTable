@@ -14,7 +14,7 @@ export default class MyNavbar extends Component {
 
         return (
 
-            <Navbar collapseOnSelect expand="lg" bg="info" variant="dark" className ="d-flex justify-content-between" >
+            <Navbar collapseOnSelect expand="sm" bg="info" variant="dark" className ="d-flex justify-content-between" >
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className ="d-inline-block mr-auto ml-auto">
@@ -27,6 +27,6 @@ export default class MyNavbar extends Component {
                 </Navbar.Collapse>
             </Navbar>
         )
-            ;
+
     }
 }

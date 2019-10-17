@@ -9,18 +9,23 @@ class MyTable extends Component {
         super(props)
         this.state = {
             tree: this.props.tree,
+            widthWindow: 900,
+            heightWindow: 1080,
         }
+    }
+
+    componentDidMount() {
+        this.setState({widthWindow: window.innerWidth});
+        this.setState({heightWindow: window.innerHeight});
     }
 
     render() {
         const tdElements = [];
-        const WIDTH = 900;
-        const HEIGHT = 400;
 
         const arrayOfDepth = this.state.tree.sortOfDepth();
 
-        let widthElement = WIDTH/arrayOfDepth[arrayOfDepth.length-1].length;//еще тут нужно на нужное количество делить
-        let heightElement = HEIGHT/ this.props.tree.getMaxDepth();
+        let widthElement = this.state.widthWindow*0.75/arrayOfDepth[arrayOfDepth.length-1].length;
+        let heightElement = this.state.heightWindow*0.35/ this.props.tree.getMaxDepth();
 
         for (let i = 1; i < arrayOfDepth.length; i++) {
 

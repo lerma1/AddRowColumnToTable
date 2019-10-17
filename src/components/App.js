@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import MyTable from "./Table";
-import MyForm from "./Insert-form"
 import History from "./History";
 import MyNavbar from "./Navbar";
 import {tree1, tree2, tree3} from "../index";
+import 'bootstrap/dist/css/bootstrap.css'
 import "../css/style.css"
 
 
@@ -72,7 +72,7 @@ class App extends Component {
         if (value == 1) {
             const newTree = tree1;
             let newHistory = {currentIndex: this.state.history.currentIndex + 1, data: this.state.history.data.slice(0, this.state.history.currentIndex+1)};
-            newHistory.data.push({text: `Создана Таблица №1`, tree: newTree});
+            newHistory.data.push({text: `Создана таблица №1`, tree: newTree});
 
             this.setState({tree: newTree, history: newHistory, indexCheckedTable: 0});
 
@@ -122,7 +122,7 @@ class App extends Component {
                              onClickCellInsertRow={this.onClickCellInsertRow} onClickCellInsertCol={this.onClickCellInsertCol}
 
                     />
-                    <div className="pl-5">
+                    <div className="">
                         <div className="d-block ">
 
 
@@ -133,7 +133,6 @@ class App extends Component {
                                  enableReDo={(this.state.history.currentIndex + 1) < this.state.history.data.length}
                                  onClickUnDo={this.onClickUnDo}
                                  onClickReDo={this.onClickReDo}
-
                         />
                     </div>
                 </div>

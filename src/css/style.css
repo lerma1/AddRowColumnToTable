@@ -4,44 +4,28 @@
     display: block;
     text-align: center;
     margin: auto;
-    width: 800px;
-    height: 400px;
 }
 
 
 .container {
-    max-width: 600px;
-    min-width: 200px;
+    min-width: 250px;
     margin: auto;
     margin-bottom: 20px;
     margin-top: 20px;
-
 }
 
 .table-tree td {
     border: black solid;
    width: content-box;
 }
+
 .history{
     display: inline-block;
-    width: 500px;
-}
-.history-list {
-    height: 150px;
-    overflow-y: scroll;
-}
-.card-deck{
-    width: 900px;
-}
-.card{
-    min-width: 350px;
-}
-.input-number {
-    display:inline-block;
-    width: 200px;
-    box-sizing: content-box;
+    max-width: 75%;
 
 }
-.btn-outline-light:hover{
-    background-color: rgba(1,255,1,1);
+.history-list {
+    overflow-y: scroll;
+    max-height: 300px;
 }
+

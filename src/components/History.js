@@ -31,7 +31,7 @@ class History extends Component {
         );
 
         return (
-            <div className=" card history  p-0 m-auto">
+            <div className=" card history  p-0 m-auto ">
                 <div className="card-header d-flex justify-content-between ">
                     <div className="d-inline-block h5 mt-auto mb-auto">История</div>
                     <div className="">
